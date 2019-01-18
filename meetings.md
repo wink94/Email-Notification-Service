@@ -15,8 +15,6 @@
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
-# Meetings notes
-
 ## Meeting 2.
 * **DATE:**
 * **ASSISTANTS:**
@@ -31,8 +29,6 @@
 
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
-
-# Meetings notes
 
 ## Meeting 3.
 * **DATE:**
@@ -49,8 +45,6 @@
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
-# Meetings notes
-
 ## Meeting 4.
 * **DATE:**
 * **ASSISTANTS:**
@@ -66,7 +60,21 @@
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
-# Meetings notes
+## Midterm meeting
+* **DATE:**
+* **ASSISTANTS:**
+* **GRADE:** *To be filled by course staff*
+
+### Minutes
+*Summary of what was discussed during the meeting*
+
+### Action points
+*List here the actions points discussed with assistants*
+
+
+### Comments from staff
+*ONLY USED BY COURSE STAFF: Additional comments from the course staff*
+
 
 ## Final meeting
 * **DATE:**
@@ -83,4 +91,3 @@
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
-# Meetings notes
