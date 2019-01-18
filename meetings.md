@@ -12,7 +12,7 @@
 *List here the actions points discussed with assistants*
 
 
-###Comments from staff
+### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 # Meetings notes
@@ -29,7 +29,7 @@
 *List here the actions points discussed with assistants*
 
 
-###Comments from staff
+### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 # Meetings notes
@@ -46,7 +46,7 @@
 *List here the actions points discussed with assistants*
 
 
-###Comments from staff
+### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 # Meetings notes
@@ -63,7 +63,7 @@
 *List here the actions points discussed with assistants*
 
 
-###Comments from staff
+### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 # Meetings notes
@@ -80,7 +80,7 @@
 *List here the actions points discussed with assistants*
 
 
-###Comments from staff
+### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 # Meetings notes
