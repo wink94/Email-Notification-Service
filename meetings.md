@@ -3,7 +3,6 @@
 ## Meeting 1.
 * **DATE:**
 * **ASSISTANTS:**
-* **GRADE:** *To be filled by course staff*
 
 ### Minutes
 *Summary of what was discussed during the meeting*
@@ -18,7 +17,6 @@
 ## Meeting 2.
 * **DATE:**
 * **ASSISTANTS:**
-* **GRADE:** *To be filled by course staff*
 
 ### Minutes
 *Summary of what was discussed during the meeting*
@@ -33,7 +31,6 @@
 ## Meeting 3.
 * **DATE:**
 * **ASSISTANTS:**
-* **GRADE:** *To be filled by course staff*
 
 ### Minutes
 *Summary of what was discussed during the meeting*
@@ -48,7 +45,6 @@
 ## Meeting 4.
 * **DATE:**
 * **ASSISTANTS:**
-* **GRADE:** *To be filled by course staff*
 
 ### Minutes
 *Summary of what was discussed during the meeting*
@@ -63,7 +59,6 @@
 ## Midterm meeting
 * **DATE:**
 * **ASSISTANTS:**
-* **GRADE:** *To be filled by course staff*
 
 ### Minutes
 *Summary of what was discussed during the meeting*
@@ -75,11 +70,9 @@
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
-
 ## Final meeting
 * **DATE:**
 * **ASSISTANTS:**
-* **GRADE:** *To be filled by course staff*
 
 ### Minutes
 *Summary of what was discussed during the meeting*
