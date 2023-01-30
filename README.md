@@ -1,5 +1,5 @@
 # PWP SPRING 2023
-# PROJECT NAME
+# Email Notification Service
 # Group information
 * Student 1. Windula Kularatne - Windula.Kularatne@student.oulu.fi
 * Student 2. Achira Hendalage - Achira.Hendalage@student.oulu.fi
