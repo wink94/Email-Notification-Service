@@ -1,16 +1,14 @@
 import DataTypes from 'sequelize';
-import logger from '../util/logger';
 import DbManager from '../config/dbManager';
 
 const models = {};
 const modelFiles = ['emailNotificationAudit'];
 
 export const modelInitializer = async () => {
-  logger.info('model initialization start');
+  console.info('model initialization start');
   const sequelize = DbManager.getConnectionPool();
 
   modelFiles.forEach((file) => {
-    // eslint-disable-next-line global-require, import/no-dynamic-require
     const sequelizeModel = require(`./${file}.js`).default(
       sequelize,
       DataTypes,
@@ -18,7 +16,7 @@ export const modelInitializer = async () => {
     models[sequelizeModel.name] = sequelizeModel;
   });
 
-  logger.info('model initialization complete');
+  console.info('model initialization complete');
 
   return 'done';
 };

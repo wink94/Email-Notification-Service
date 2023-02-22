@@ -1,5 +1,4 @@
-/* eslint-disable func-names */
-/* eslint-disable no-magic-numbers */
+
 export default function (sequelize, DataTypes) {
   return sequelize.define(
     'emailNotificationAudit',
@@ -9,7 +8,7 @@ export default function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        field: 'email_notification_audit_primary_id',
+        field: 'email_notification_audit_id',
       },
       emailSubject: {
         type: DataTypes.STRING(60),
@@ -19,12 +18,12 @@ export default function (sequelize, DataTypes) {
       receivers: {
         type: DataTypes.JSON,
         allowNull: false,
-        field: 'receivers',
+        field: 'recipients',
       },
       sesRequestId: {
         type: DataTypes.STRING(150),
         allowNull: true,
-        field: 'ses_request_id',
+        field: 'request_id',
       },
     },
     {

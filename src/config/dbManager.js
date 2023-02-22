@@ -1,7 +1,5 @@
 import Sequelize from 'sequelize';
 import dbConfigs from './databaseConfigs';
-import { BACK_OFF_RATIO, INITIAL_DELAY, MAX_ATTEMPTS } from '../util/constant';
-import logger from '../util/logger';
 
 export default class DbManager {
   static init(context) {
@@ -28,22 +26,22 @@ export default class DbManager {
           idle: 0,
           evict: context.getRemainingTimeInMillis(),
         },
-        retry: {
-          match: [
-            /SequelizeConnectionError/,
-            /SequelizeConnectionRefusedError/,
-            /SequelizeHostNotFoundError/,
-            /SequelizeHostNotReachableError/,
-            /SequelizeInvalidConnectionError/,
-            /SequelizeConnectionTimedOutError/,
-          ],
-          name: 'query',
-          backoffBase: INITIAL_DELAY,
-          backoffExponent: BACK_OFF_RATIO,
-          timeout: 60000,
-          max: MAX_ATTEMPTS,
-          report: (data) => logger.info(data),
-        },
+        // retry: {
+        //   match: [
+        //     /SequelizeConnectionError/,
+        //     /SequelizeConnectionRefusedError/,
+        //     /SequelizeHostNotFoundError/,
+        //     /SequelizeHostNotReachableError/,
+        //     /SequelizeInvalidConnectionError/,
+        //     /SequelizeConnectionTimedOutError/,
+        //   ],
+        //   name: 'query',
+        //   backoffBase: INITIAL_DELAY,
+        //   backoffExponent: BACK_OFF_RATIO,
+        //   timeout: 60000,
+        //   max: MAX_ATTEMPTS,
+        //   report: (data) => logger.info(data),
+        // },
       },
     );
   }

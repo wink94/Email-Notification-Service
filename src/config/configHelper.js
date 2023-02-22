@@ -1,36 +1,13 @@
-/** @format */
 
-import { SSMClient, GetParametersByPathCommand } from '@aws-sdk/client-ssm';
-import { BACK_OFF_RATIO, INITIAL_DELAY, MAX_ATTEMPTS } from '../util/constant';
-import { awsRetryConfigGenerator } from '../util/helpers';
-import logger from '../util/logger';
-import { ENV } from './configs';
 
-const retryConfigs = awsRetryConfigGenerator({
-  maxAttempts: MAX_ATTEMPTS,
-  backOffRatio: BACK_OFF_RATIO,
-  initialDelay: INITIAL_DELAY,
-});
 
-const ssmClient = new SSMClient({
-  region: 'us-east-1',
-  ...retryConfigs,
-});
-
-const values = {};
-const configBaseURL = `/crms/${ENV}/notification-ms/`;
 
 // Database Configuration
 export async function fetchDatabaseConfigs() {
-  const params = {
-    Path: configBaseURL,
-    Recursive: true,
-    WithDecryption: true,
-  };
 
   try {
-    const command = new GetParametersByPathCommand(params);
-    const response = await ssmClient.send(command);
+
+    const response = [];
     response.Parameters.forEach((element) => {
       const param = element.Name.split(configBaseURL)[1].split('/')[1];
       switch (param) {
@@ -55,7 +32,7 @@ export async function fetchDatabaseConfigs() {
     });
     return '';
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     throw new Error(error);
   }
 }
