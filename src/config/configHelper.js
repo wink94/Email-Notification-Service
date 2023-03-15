@@ -1,15 +1,15 @@
 
 
-
+const values = {};
 
 // Database Configuration
 export async function fetchDatabaseConfigs() {
 
   try {
 
-    const response = [];
-    response.Parameters.forEach((element) => {
-      const param = element.Name.split(configBaseURL)[1].split('/')[1];
+    const response = [{Name:'host',Value:'127.0.0.1'},{Name:'user',Value:'root'},{Name:'password',Value:'root'},{Name:'database',Value:'email_notification_db'}];
+    response.forEach((element) => {
+      const param = element.Name
       switch (param) {
         case 'password':
           values.db_password = element.Value;

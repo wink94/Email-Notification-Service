@@ -1,0 +1,52 @@
+service: email-notification-ms-v1
+
+frameworkVersion: '3'
+configValidationMode: error
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+
+custom:
+  serverless-offline:
+    httpPort: 3031
+    websocketPort: 3021
+    lambdaPort: 3022
+    noPrependStageInUrl: true
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: 
+      forceInclude:
+        - mysql2
+        - source-map-support
+    packager: 'npm'
+  environments:
+    dev: DEV
+    qa: QA
+
+provider:
+  name: aws
+  endpointType: PRIVATE
+  runtime: nodejs16.x
+  stage: dev
+
+functions:
+  email-notification-ms-v1:
+    handler: src/app.serverlessApp
+    memorySize: 1024
+    timeout: 120
+    events:
+      - http:
+          path: /{any+}
+          method: get
+      - http:
+          path: /{any+}
+          method: post
+      - http:
+          path: /{any+}
+          method: delete
+      - http:
+          path: /{any+}
+          method: patch
+

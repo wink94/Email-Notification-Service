@@ -40,13 +40,3 @@ export const awsRetryConfigGenerator = (options) => {
     ),
   };
 };
-
-export const isValidUSDate = (dateString) => {
-  const parsedDate = parse(dateString, 'P', new Date(), { locale: enUS });
-  return isValid(parsedDate);
-};
-
-export const isValidUSDateTime = (dateString) => {
-  const parsedDate = parse(dateString, 'MM-dd-yyyy HH:mm:ss', new Date());
-  return isValid(parsedDate);
-};

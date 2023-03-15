@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "build": "babel src/app.js -d dist",
     "start": "serverless offline start --stage dev",
     "deploy": "serverless deploy -v",
     "eslint": "eslint src/**/*.js",

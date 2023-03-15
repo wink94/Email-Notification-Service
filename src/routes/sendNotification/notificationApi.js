@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import HttpStatus from 'http-status-codes';
-import { sesServiceRequestDTO } from '../../dto/sesService/sesServiceRequestDTO';
+import { sesServiceRequestDTO } from '../../dto/sesServiceRequestDTO';
 import notificationService from '../../services/notification/notificationService';
 import { createErrorResponse, createSuccessResponse } from '../../util/responseGenerator';
 

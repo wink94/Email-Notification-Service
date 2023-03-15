@@ -2,10 +2,7 @@
 
 import InvalidRequestException from '../../exceptions/InvalidRequestException';
 import ajvErrorHandler from '../../util/ajvErrorHandler';
-import { REBATE_TEMPLATE_NAME } from '../../util/constant';
 import sesService from '../sesService/sesService';
-import emailAuditService from './emailAuditService';
-import { validateTemplate } from '../../dto/sesService/sesServiceRequestDTO';
 
 class NotificationService {
   async pushNotification(validatedDto) {
@@ -17,9 +14,6 @@ class NotificationService {
 
     const bccAddresses = validatedDto.bccAddresses || [];
 
-    if (validatedDto.template === REBATE_TEMPLATE_NAME) {
-      bccAddresses.push(...emailAuditService.getEmailAuditEmailAddresses());
-    }
 
     const jsonObj = {
       applicationName: validatedDto.applicationName,
@@ -45,7 +39,7 @@ class NotificationService {
   }
 
   async testTemplate(data) {
-    const validatedDto = validateTemplate(data);
+    const validatedDto = {isValidTemplate:false,schema:{}};
     const finalResponse = {
       isSuccess: true,
       payLoad: null,

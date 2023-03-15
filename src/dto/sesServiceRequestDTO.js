@@ -1,12 +1,6 @@
 import Ajv from 'ajv';
-import InvalidRequestException from '../../exceptions/InvalidRequestException';
-import ajvErrorHandler from '../../util/ajvErrorHandler';
-import {
-  DATA_DISCREPANCY_TEMPLATE_NAME,
-  GL_TEMPLATE_NAME,
-  REBATE_TEMPLATE_NAME,
-} from '../../util/constant';
-import { isValidUSDate, isValidUSDateTime } from '../../util/helpers';
+import InvalidRequestException from '../exceptions/InvalidRequestException';
+import ajvErrorHandler from '../util/ajvErrorHandler';
 
 const ajv = new Ajv({ coerceTypes: true, format: 'full' });
 
@@ -18,23 +12,6 @@ ajv.addKeyword('isNotEmpty', {
   errors: false,
 });
 
-ajv.addKeyword('isValidUSDateString', {
-  type: 'string',
-  schema: false,
-  validate(data) {
-    return typeof data === 'string' && isValidUSDate(data);
-  },
-  errors: false,
-});
-
-ajv.addKeyword('isValidUSDateTimeString', {
-  type: 'string',
-  schema: false,
-  validate(data) {
-    return typeof data === 'string' && isValidUSDateTime(data);
-  },
-  errors: false,
-});
 
 // validation schema
 const schemaDefinition = {
