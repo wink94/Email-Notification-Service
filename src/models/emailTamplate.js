@@ -1,6 +1,6 @@
 export default function (sequelize, DataTypes) {
     return sequelize.define(
-      'Template',
+      'emailTemplate',
       {
         Tem_ID: {
           type: DataTypes.INTEGER,
@@ -48,7 +48,7 @@ export default function (sequelize, DataTypes) {
         },
       },
       {
-        tableName: 'Template',
+        tableName: 'emailTemplate',
         timestamps: false,
         underscored: true,
       }

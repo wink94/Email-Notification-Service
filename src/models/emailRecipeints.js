@@ -1,6 +1,6 @@
 export default function (sequelize, DataTypes) {
     return sequelize.define(
-      'Res',
+      'emailRecipeints',
       {
         res_ID: {
           type: DataTypes.INTEGER,
@@ -30,7 +30,7 @@ export default function (sequelize, DataTypes) {
         },
       },
       {
-        tableName: 'Res',
+        tableName: 'emailRecipeints',
         timestamps: false,
         underscored: true,
       }

@@ -1,6 +1,6 @@
 export default function (sequelize, DataTypes) {
     return sequelize.define(
-      'Notification',
+      'emailNotification',
       {
         Not_ID: {
           type: DataTypes.INTEGER,
@@ -50,7 +50,7 @@ export default function (sequelize, DataTypes) {
         },
       },
       {
-        tableName: 'Notification',
+        tableName: 'emailNotification',
         timestamps: false,
         underscored: true,
       }
