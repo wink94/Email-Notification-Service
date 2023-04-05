@@ -1,13 +1,11 @@
 import {
-  SendTemplatedEmailCommand,
-  SESClient,
-  TestRenderTemplateCommand,
+  SESClient
 } from '@aws-sdk/client-ses';
-import logger from '../../util/logger';
 import { SES_EXCEPTIONS } from '../../exceptions/exceptionCodes';
 import SESException from '../../exceptions/SESException';
-import { APPLICATION_NAME, EMAIL_TYPE, CONFIG_SET } from '../../util/constant';
+import { APPLICATION_NAME, CONFIG_SET, EMAIL_TYPE } from '../../util/constant';
 import { sleep } from '../../util/helpers';
+import logger from '../../util/logger';
 import emailAuditService from '../notification/emailAuditService';
 
 class SESService {
@@ -47,7 +45,7 @@ class SESService {
       const response = {
         requestId: '1aaee205-fbbf-436f-881d-c98325c33806',
         isSuccess: true,
-      }
+      };
 
       const auditData = {
         receivers: {
@@ -56,13 +54,14 @@ class SESService {
           BccAddresses: event.bccAddresses,
         },
         subject: JSON.parse(event.templateData).subject,
-        sesRequestId: response.$metadata.requestId,
+        // sesRequestId: response.$metadata.requestId,
+        sesRequestId: response.requestId,
       };
       await emailAuditService.addEmailAuditEntry(auditData);
 
       logger.info(response);
       return {
-        requestId: response.$metadata.requestId,
+        requestId: auditData.sesRequestId,
         isSuccess: true,
       };
     } catch (error) {

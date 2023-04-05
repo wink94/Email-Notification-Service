@@ -12,7 +12,6 @@ ajv.addKeyword('isNotEmpty', {
   errors: false,
 });
 
-
 // validation schema
 const schemaDefinition = {
   type: 'object',
@@ -61,9 +60,7 @@ const schemaDefinition = {
   additionalProperties: false,
 };
 
-
 const validate = ajv.compile(schemaDefinition);
-
 
 export function sesServiceRequestDTO(data) {
   const valid = validate(data);

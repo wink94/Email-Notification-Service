@@ -14,7 +14,6 @@ class NotificationService {
 
     const bccAddresses = validatedDto.bccAddresses || [];
 
-
     const jsonObj = {
       applicationName: validatedDto.applicationName,
       emailCategory: validatedDto.emailCategory,
@@ -39,7 +38,7 @@ class NotificationService {
   }
 
   async testTemplate(data) {
-    const validatedDto = {isValidTemplate:false,schema:{}};
+    const validatedDto = { isValidTemplate: false, schema: {} };
     const finalResponse = {
       isSuccess: true,
       payLoad: null,

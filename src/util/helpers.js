@@ -1,6 +1,4 @@
 import { StandardRetryStrategy } from '@aws-sdk/middleware-retry';
-import { isValid, parse } from 'date-fns';
-import { enUS } from 'date-fns/locale';
 import { BACK_OFF_RATIO, INITIAL_DELAY, MAX_ATTEMPTS } from './constant';
 import logger from './logger';
 

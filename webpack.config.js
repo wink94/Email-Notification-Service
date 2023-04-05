@@ -39,9 +39,9 @@ module.exports = {
   },
 
   plugins: [
-    new ESLintPlugin({
-      useEslintrc: true,
-      baseConfig: eslintConfig,
-    }),
+    // new ESLintPlugin({
+    //   useEslintrc: true,
+    //   baseConfig: eslintConfig,
+    // }),
   ],
 };
