@@ -10,6 +10,8 @@ class RecipientsApi {
     this.router.post('/', this.addRecipients);
     this.router.get('/', this.getAllRecipients);
     this.router.get('/:recipientId', this.getRecipientById);
+    this.router.delete('/', this.deleteRecipients);
+    this.router.put('/', this.deleteRecipients);
   }
 
   async addRecipients(req, res, next) {
@@ -38,5 +40,26 @@ class RecipientsApi {
       next(error);
     }
   }
+  
+  async deleteRecipients(req, res, next) {
+    try {
+      const data = await recipientDao.getRecipient(req.params.recipientId); // check agian 
+      res.status(HttpStatus.OK).send(createSuccessResponse(data, null)); // maybe deleted?
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  
+  async updateRecipients(req, res, next) {
+    try {
+      const data = await recipientDao.getRecipient(req.params.recipientId); // check agian 
+      res.status(HttpStatus.OK).send(createSuccessResponse(data, null)); // maybe deleted?
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
 }
 export default RecipientsApi;

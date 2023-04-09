@@ -8,6 +8,8 @@ class NotificationApi {
   constructor() {
     this.router = new Router({ mergeParams: true });
     this.router.post('/', this.pushNotification);
+    this.router.get('/', this.getAllNotifications); // funcion ad the corresponding dao file must be included
+    this.router.post('/', this.sendNotification);   // funcion ad the corresponding dao file must be included
   }
 
   /**
