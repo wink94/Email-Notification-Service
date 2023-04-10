@@ -37,16 +37,38 @@ All the comments mentioned in the above were rectified and the descriptions were
 
 
 ## Meeting 2.
-* **DATE: **
-* **ASSISTANTS:**
+* **DATE: 22.02.2023**
+* **ASSISTANTS: Prof. Ivan Sanchez Milara**
 
 ### Minutes
 *Summary of what was discussed during the meeting*
 
+1. API description modifications to be done
+2. Explained the service front end and the back end
+3. Discussed about this Database which we had only one table in it. 
+4. Team mentioned that we are going to use a MySQL relational database. 
+5. The current table is using as an auditing table.
+6. Also it is using to check whether the email has delivered or not.
+7. Instructor asked to implement REST API in the application.
+8. Also, the Team has to add 5 resources to the API to implement.
+9. Also, instructd to Each HTTP methods like GET/PUT/POST/DELETE should implement.
+10. Adviced to add multiple tables with above mentioned 5 resources.
+11. Adding external auxiliary services is not that compulsory but the team can add them if they want.
+12. Adviced to plan to add atleast 3 more tables.
+13. Suggested to go for MongoDB.
+14. Service should be self contained.
+15. Explain the table propoerties like request_id.
+16. Add information on populating the database.
+17. what are the dependecies and what systems are using for this.
+
 ### Action points
 *List here the actions points discussed with assistants*
 
-
+1. suggested to add an additional table to add recipients.
+2. Suggested to add more tables.
+3. Added more descriptions to the API description.
+4. Added information of populating the database.
+5. Added information on the dependencies and what systems used for the development of the API.
 
 
 ## Meeting 3.
