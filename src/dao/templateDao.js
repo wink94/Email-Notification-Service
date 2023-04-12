@@ -2,10 +2,10 @@ import DBException from '../exceptions/DBException';
 import { getModule } from '../models/index';
 
 class TemplateDao {
-  async insertRecipients(dataParams) {
+  async insertTemplate(dataParams) {
     try {
-      const recipient = getModule('template');
-      return recipient.create(
+      const template = getModule('template');
+      return template.create(
         dataParams,
       );
     } catch (error) {
@@ -13,20 +13,20 @@ class TemplateDao {
     }
   }
 
-  async getAllRecipient() {
+  async getAllTemplate() {
     try {
-      const recipient = getModule('template');
-      return recipient.findAll({ raw: true, subQuery: false });
+      const template = getModule('template');
+      return template.findAll({ raw: true, subQuery: false });
     } catch (error) {
       throw new DBException(error.toString());
     }
   }
 
-  async getRecipient(recipientId) {
+  async getTemplate(recipientId) {
     try {
-      const recipient = getModule('template');
-      return recipient.findAll({
-        where: { recipientId },
+      const template = getModule('template');
+      return template.findAll({
+        where: { templateId },
         raw: true,
       });
     } catch (error) {
