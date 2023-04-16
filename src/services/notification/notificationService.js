@@ -20,7 +20,7 @@ class NotificationService {
       toAddresses: validatedDto.toAddresses,
       ccAddresses: validatedDto.ccAddresses,
       bccAddresses,
-      sourceEmail: 'Alerts@abc.com',
+      sourceEmail: 'lkspade@gmail.com',
       templateName: validatedDto.template,
       templateData: templateDataJSONString,
     };
