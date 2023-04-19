@@ -2,7 +2,7 @@ import DataTypes from 'sequelize';
 import DbManager from '../config/dbManager';
 
 const models = {};
-const modelFiles = ['emailNotificationAudit', 'recipient'];
+const modelFiles = ['emailNotificationAudit', 'recipient', 'template'];
 
 export const modelInitializer = async () => {
   console.info('model initialization start');

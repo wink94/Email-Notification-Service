@@ -49,13 +49,19 @@ const schemaDefinition = {
       type: 'array',
       items: { format: 'email', type: 'string', isNotEmpty: true },
     },
+    templateId: {
+      type: 'number',
+    },
+    recipientId: {
+      type: 'number',
+    },
   },
   required: [
     'applicationName',
     'emailCategory',
-    'template',
+
     'templateData',
-    'toAddresses',
+
   ],
   additionalProperties: false,
 };
