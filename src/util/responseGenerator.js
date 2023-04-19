@@ -9,6 +9,12 @@ export function createSuccessResponse(data, message) {
   if (message) {
     responseData.message = message;
   }
+  if (Array.isArray(data)) {
+    return {
+      status: 'success',
+      data,
+    };
+  }
   return {
     status: 'success',
     data: data ? { ...data, ...responseData } : responseData,

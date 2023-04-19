@@ -1,15 +1,11 @@
-
-
 const values = {};
 
 // Database Configuration
 export async function fetchDatabaseConfigs() {
-
   try {
-
-    const response = [{Name:'host',Value:'127.0.0.1'},{Name:'user',Value:'root'},{Name:'password',Value:'root'},{Name:'database',Value:'email_notification_db'}];
+    const response = [{ Name: 'host', Value: '127.0.0.1' }, { Name: 'user', Value: 'root' }, { Name: 'password', Value: 'root' }, { Name: 'database', Value: 'email_notification_db' }];
     response.forEach((element) => {
-      const param = element.Name
+      const param = element.Name;
       switch (param) {
         case 'password':
           values.db_password = element.Value;
@@ -42,6 +38,6 @@ export const getDBConfigValue = (key) => {
     return values[key];
   }
   const msg = `configuration key ${key} not found`;
-  logger.error(msg);
+  console.error(msg);
   throw new Error(msg);
 };

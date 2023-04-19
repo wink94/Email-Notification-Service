@@ -4,6 +4,7 @@ import dbConfigs from './databaseConfigs';
 export default class DbManager {
   static init(context) {
     const configs = dbConfigs();
+    console.log(configs);
     DbManager.poolObj = new Sequelize(
       configs.database,
       configs.user,

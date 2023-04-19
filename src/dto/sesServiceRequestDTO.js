@@ -12,7 +12,6 @@ ajv.addKeyword('isNotEmpty', {
   errors: false,
 });
 
-
 // validation schema
 const schemaDefinition = {
   type: 'object',
@@ -50,20 +49,24 @@ const schemaDefinition = {
       type: 'array',
       items: { format: 'email', type: 'string', isNotEmpty: true },
     },
+    templateId: {
+      type: 'number',
+    },
+    recipientId: {
+      type: 'number',
+    },
   },
   required: [
     'applicationName',
     'emailCategory',
-    'template',
+
     'templateData',
-    'toAddresses',
+
   ],
   additionalProperties: false,
 };
 
-
 const validate = ajv.compile(schemaDefinition);
-
 
 export function sesServiceRequestDTO(data) {
   const valid = validate(data);
