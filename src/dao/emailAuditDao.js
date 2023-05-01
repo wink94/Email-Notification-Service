@@ -1,3 +1,4 @@
+import DBException from '../exceptions/DBException';
 import { getModule } from '../models/index';
 
 class EmailAuditDao {
@@ -8,6 +9,24 @@ class EmailAuditDao {
       receivers: dataParams.receivers,
       sesRequestId: dataParams.sesRequestId,
     });
+  }
+
+  async getAllEmailAuditEntry() {
+    try {
+      const emailNotificationAudit = getModule('emailNotificationAudit');
+      return emailNotificationAudit.findAll({ raw: true, subQuery: false });
+    } catch (error) {
+      throw new DBException(error.toString());
+    }
+  }
+
+  async getEmailAuditByEmailSubject(emailSubject) {
+    try {
+      const emailNotificationAudit = getModule('emailNotificationAudit');
+      return emailNotificationAudit.findAll({ raw: true, where: { emailSubject } });
+    } catch (error) {
+      throw new DBException(error.toString());
+    }
   }
 }
 

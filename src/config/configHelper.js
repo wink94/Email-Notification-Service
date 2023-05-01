@@ -28,7 +28,6 @@ export async function fetchDatabaseConfigs() {
     });
     return '';
   } catch (error) {
-    console.error(error);
     throw new Error(error);
   }
 }
@@ -38,6 +37,5 @@ export const getDBConfigValue = (key) => {
     return values[key];
   }
   const msg = `configuration key ${key} not found`;
-  console.error(msg);
   throw new Error(msg);
 };

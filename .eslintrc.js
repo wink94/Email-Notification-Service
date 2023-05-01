@@ -9,11 +9,12 @@ module.exports = {
     sourceType: 'module',
   },
   extends: ['eslint:recommended', 'airbnb-base'],
+  ignorePatterns: ['**/*.test.js'],
   rules: {
     'class-methods-use-this': 'off',
     'import/prefer-default-export': 'off',
     'import/no-import-module-exports': 'off',
-    'linebreak-style': ['error','windows'],
+    'linebreak-style': ['error', 'windows'],
   },
   globals: {
     jest: false,

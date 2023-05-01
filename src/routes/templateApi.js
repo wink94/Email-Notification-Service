@@ -10,8 +10,8 @@ class TemplateApi {
     this.router.post('/', this.addTemplates);
     this.router.get('/', this.getAllTemplates);
     this.router.get('/:templateiD', this.getTemplateById);
-    // this.router.delete('/', this.deleteTemplate);
-    // this.router.put('/', this.deleteTemplate);
+    this.router.delete('/:templateId', this.deleteTemplate);
+    this.router.patch('/:templateId', this.updateTemplate);
   }
 
   async addTemplates(req, res, next) {
@@ -41,22 +41,22 @@ class TemplateApi {
     }
   }
 
-  // async deleteTemplates(req, res, next) {
-  //   try {
-  //     const data = await templateDao.getTemplate(req.params.templateId); // check agian
-  //     res.status(HttpStatus.OK).send(createSuccessResponse(data, null)); // maybe deleted?
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  async deleteTemplate(req, res, next) {
+    try {
+      await templateDao.deleteTemplate(req.params.templateId);
+      res.status(HttpStatus.NO_CONTENT).send();
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  // async updateTemplates(req, res, next) {
-  //   try {
-  //     const data = await templateDao.getTemplate(req.params.templateId); // check agian
-  //     res.status(HttpStatus.OK).send(createSuccessResponse(data, null)); // maybe deleted?
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
+  async updateTemplate(req, res, next) {
+    try {
+      await templateDao.updateTemplate(req.params.templateId, mapTemplateRequestBody(req.body));
+      res.status(HttpStatus.OK).send(createSuccessResponse(null, 'Template updated successfully.'));
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 export default TemplateApi;

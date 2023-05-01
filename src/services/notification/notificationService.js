@@ -1,10 +1,8 @@
 /** @format */
 
-import InvalidRequestException from '../../exceptions/InvalidRequestException';
-import ajvErrorHandler from '../../util/ajvErrorHandler';
-import sesService from '../sesService/sesService';
-import templateDao from '../../dao/templateDao';
 import recipientDao from '../../dao/recipientDao';
+import templateDao from '../../dao/templateDao';
+import sesService from '../sesService/sesService';
 
 class NotificationService {
   async pushNotification(validatedDto) {
@@ -75,33 +73,6 @@ class NotificationService {
     }
 
     finalResponse.isSuccess = false;
-    return finalResponse;
-  }
-
-  async testTemplate(data) {
-    const validatedDto = { isValidTemplate: false, schema: {} };
-    const finalResponse = {
-      isSuccess: true,
-      payLoad: null,
-    };
-
-    const { isValidTemplate, schema } = validatedDto;
-
-    if (!isValidTemplate && schema) {
-      throw new InvalidRequestException(ajvErrorHandler(schema));
-    }
-    const response = await sesService.testRenderTemplate(
-      data.template,
-      data.templateData,
-    );
-
-    if (!response.isSuccess) {
-      finalResponse.isSuccess = false;
-      finalResponse.payLoad = response.code;
-    } else {
-      finalResponse.message = 'Template is valid';
-    }
-
     return finalResponse;
   }
 }

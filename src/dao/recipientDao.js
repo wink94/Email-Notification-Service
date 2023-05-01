@@ -33,6 +33,35 @@ class RecipientDao {
       throw new DBException(error.toString());
     }
   }
+
+  async deleteRecipient(recipientId) {
+    try {
+      const recipient = getModule('recipient');
+      return recipient.update(
+        { active: 0 },
+        { where: { recipientId } },
+      );
+    } catch (error) {
+      throw new DBException(error.toString());
+    }
+  }
+
+  async updateRecipient(recipientId, dataParams) {
+    try {
+      const recipient = getModule('recipient');
+      return recipient.update(
+        {
+          ...dataParams,
+          recipientId,
+        },
+        {
+          where: { recipientId },
+        },
+      );
+    } catch (error) {
+      throw new DBException(error.toString());
+    }
+  }
 }
 
 export default new RecipientDao();

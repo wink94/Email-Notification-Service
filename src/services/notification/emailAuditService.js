@@ -1,6 +1,5 @@
 /** @format */
 
-import { getDBConfigValue } from '../../config/configHelper';
 import EmailAuditDao from '../../dao/emailAuditDao';
 import logger from '../../util/logger';
 
@@ -15,21 +14,6 @@ class EmailAuditService {
       logger.error(error);
       logger.error('Email audit entry adding failed');
       return false;
-    }
-  }
-
-  getEmailAuditEmailAddresses() {
-    try {
-      const emailsAddresses = getDBConfigValue('audit_emails');
-
-      if (emailsAddresses !== 'NULL' && typeof emailsAddresses === 'string') {
-        return emailsAddresses.split(',');
-      }
-      return [];
-    } catch (error) {
-      logger.error(error);
-      logger.error('audit bcc email addresses fetching failed');
-      return [];
     }
   }
 }

@@ -33,6 +33,35 @@ class TemplateDao {
       throw new DBException(error.toString());
     }
   }
+
+  async deleteTemplate(templateId) {
+    try {
+      const template = getModule('template');
+      return template.update(
+        { active: 0 },
+        { where: { templateId } },
+      );
+    } catch (error) {
+      throw new DBException(error.toString());
+    }
+  }
+
+  async updateTemplate(templateId, dataParams) {
+    try {
+      const template = getModule('template');
+      return template.upsert(
+        {
+          templateId,
+          ...dataParams,
+        },
+        {
+          where: { templateId },
+        },
+      );
+    } catch (error) {
+      throw new DBException(error.toString());
+    }
+  }
 }
 
 export default new TemplateDao();

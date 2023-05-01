@@ -10,6 +10,8 @@ class RecipientsApi {
     this.router.post('/', this.addRecipients);
     this.router.get('/', this.getAllRecipients);
     this.router.get('/:recipientId', this.getRecipientById);
+    this.router.delete('/:recipientId', this.deleteRecipientById);
+    this.router.patch('/:recipientId', this.updateRecipientById);
   }
 
   async addRecipients(req, res, next) {
@@ -34,6 +36,25 @@ class RecipientsApi {
     try {
       const data = await recipientDao.getRecipient(req.params.recipientId);
       res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteRecipientById(req, res, next) {
+    try {
+      await recipientDao.deleteRecipient(req.params.recipientId);
+      res.status(HttpStatus.NO_CONTENT).send();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateRecipientById(req, res, next) {
+    try {
+      await recipientDao.updateRecipient(req.params.recipientId, mapRecipientRequestBody(req.body));
+
+      res.status(HttpStatus.OK).send(createSuccessResponse(null, 'Recipient updated successfully.'));
     } catch (error) {
       next(error);
     }

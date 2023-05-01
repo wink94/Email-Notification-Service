@@ -8,7 +8,7 @@ export const GENERAL_EXCEPTION = 4000;
 
 export const REST_CLIENT_EXCEPTION = 2000;
 export const API_CENTRAL_EXCEPTION = 2002;
-export const _ALB_EXCEPTION = 2003;
+export const ALB_EXCEPTION = 2003;
 
 export const SES_EXCEPTIONS = ['AccountSendingPaused', 'ConfigurationSetDoesNotExist',
   'ConfigurationSetSendingPaused', 'MailFromDomainNotVerified', 'MessageRejected',

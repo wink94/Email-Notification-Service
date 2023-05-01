@@ -2,12 +2,15 @@ import { Router } from 'express';
 import HttpStatus from 'http-status-codes';
 import { sesServiceRequestDTO } from '../dto/sesServiceRequestDTO';
 import notificationService from '../services/notification/notificationService';
+import emailAuditDao from '../dao/emailAuditDao';
 import { createErrorResponse, createSuccessResponse } from '../util/responseGenerator';
 
 class NotificationApi {
   constructor() {
     this.router = new Router({ mergeParams: true });
     this.router.post('/', this.pushNotification);
+    this.router.get('/', this.getAllEmailAudits);
+    this.router.get('/email-subject/:emailSubject', this.getEmailAuditBySubject);
   }
 
   /**
@@ -27,6 +30,25 @@ class NotificationApi {
       } else {
         res.status(HttpStatus.BAD_REQUEST).send(createErrorResponse(null, response.payLoad));
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAllEmailAudits(req, res, next) {
+    try {
+      const data = await emailAuditDao.getAllEmailAuditEntry();
+      res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getEmailAuditBySubject(req, res, next) {
+    try {
+      const { emailSubject } = req.params;
+      const data = await emailAuditDao.getEmailAuditByEmailSubject(emailSubject);
+      res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
     } catch (error) {
       next(error);
     }
