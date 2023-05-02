@@ -1,0 +1,80 @@
+.email-form {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    margin: 160px auto;
+    max-width: 1000px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .email-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .email-form-header h2 {
+    margin: 0;
+  }
+
+  .send-email-btn {
+    background-color: #000000;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .send-email-btn:hover {
+    background-color: #3e8e41;
+  }
+  
+  
+  .email-form-buttons button {
+    margin-left: 8px;
+    padding: 8px 16px;
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .email-form-buttons button:hover {
+    background-color: #0069d9;
+  }
+  
+  .email-form-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  
+  .email-form-input label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .email-form-input input[type="email"],
+  .email-form-input input[type="text"],
+  .email-form-input textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .email-form-input textarea {
+    resize: vertical;
+  }
+  
