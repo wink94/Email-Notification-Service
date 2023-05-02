@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./EmailForm.css";
 import "./Popup.css";
+import RecipientWindow from './RecipientsPopup.js';
+import TemplateWindow from './TemplatePopup.js';
+
+
 
 function EmailForm() {
   const [to, setTo] = useState("");
@@ -75,9 +79,7 @@ function TemplatePopup({ onClose }) {
   return (
     <div className="popup-overlay">
       <div className="popup">
-        <h3>Manage Templates</h3>
-        <p>text</p>
-        <button onClick={onClose}>Close</button>
+        <TemplateWindow/>
       </div>
     </div>
   );
@@ -87,9 +89,7 @@ function RecipientPopup({ onClose }) {
   return (
     <div className="popup-overlay">
       <div className="popup">
-        <h3>Manage Recipients</h3>
-        <p>text</p>
-        <button onClick={onClose}>Close</button>
+        <RecipientWindow />
       </div>
     </div>
   );
