@@ -16,7 +16,7 @@ class TemplateDao {
   async getAllTemplates() {
     try {
       const template = getModule('template');
-      return template.findAll({ raw: true, subQuery: false });
+      return template.findAll({ raw: true, subQuery: false, where: { active: 1 } });
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -26,7 +26,7 @@ class TemplateDao {
     try {
       const template = getModule('template');
       return template.findAll({
-        where: { templateId },
+        where: { templateId, active: 1 },
         raw: true,
       });
     } catch (error) {
@@ -49,10 +49,11 @@ class TemplateDao {
   async updateTemplate(templateId, dataParams) {
     try {
       const template = getModule('template');
-      return template.upsert(
+      return template.update(
         {
-          templateId,
+
           ...dataParams,
+          templateId,
         },
         {
           where: { templateId },
