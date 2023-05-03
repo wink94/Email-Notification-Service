@@ -35,3 +35,6 @@ CREATE TABLE `template` (
   `template_subject` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`template_id`)
 )
+
+ALTER TABLE email_notification_audit
+ADD FOREIGN KEY (template_id) REFERENCES template(template);
