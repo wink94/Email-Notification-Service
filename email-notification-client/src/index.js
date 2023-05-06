@@ -1,13 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./App";
+import EmailForm from "./EmailForm/EmailForm";
+import RecipientPopups from "./EmailForm/RecipientsPopup";
+import TemplatePopup from "./EmailForm/TemplatePopup";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/app",
+    element: <EmailForm />,
+  },
+  {
+    path: "/app/recipient",
+    element: <RecipientPopups />,
+  },
+  {
+    path: "/app/template",
+    element: <TemplatePopup />,
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
@@ -15,3 +38,4 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
