@@ -9,20 +9,26 @@ import {
   pushEmailNotification,
 } from "../data/emailPush";
 import MaterialTable from "./MaterialTable";
-import { redirect,useNavigate  } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
+import { useLoginHandler } from "../config/userLogin";
 
 function EmailForm() {
   const [applicationName, setApplicationName] = useState("");
   const [emailCategory, setEmailCategory] = useState("");
   const [templateId, setTemplateId] = useState("");
   const [emailData, setEmailData] = useState([]);
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { loading, isAuthenticated, userPool, getAuthenticatedUser, signOut,setAuthenticated } =
+    useLoginHandler("");
 
   const fetchEmailAudit = useCallback(async () => {
     const res = await getAllEmailAuditEntry();
     setEmailData(res?.data);
   }, []);
   useEffect(() => {
+    if (!getAuthenticatedUser().getUsername()) {
+      navigate("/");
+    }
     fetchEmailAudit();
   }, []);
 
@@ -103,12 +109,12 @@ function EmailForm() {
 
   const handleManageTemplatesClick = () => {
     // setShowTemplatePopup(true);
-    navigate('/app/template')
+    navigate("/app/template");
   };
 
   const handleManageRecipientsClick = () => {
     // setShowRecipientPopup(true);
-    navigate('/app/recipient')
+    navigate("/app/recipient");
   };
 
   const handlePopupClose = () => {

@@ -9,7 +9,7 @@ import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 function LoginForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const {loading, isAuthenticated, userPool, getAuthenticatedUser, signOut} = useLoginHandler("");
+  const {loading, isAuthenticated, userPool, getAuthenticatedUser, signOut,setAuthenticated} = useLoginHandler("");
   const navigate = useNavigate()
 
   const onSubmit = (e) => {
@@ -40,6 +40,7 @@ function LoginForm() {
     user.authenticateUser(authDetails, {
       onSuccess: (result) => {
         console.log("login success", result);
+        setAuthenticated()
         navigate('/app')
       },
       onFailure: (err) => {
@@ -47,6 +48,7 @@ function LoginForm() {
       },
       newPasswordRequired: (data) => {
         console.log("new password required", data);
+        setAuthenticated()
         navigate('/app')
       },
     });

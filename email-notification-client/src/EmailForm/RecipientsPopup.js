@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { addRecipient, getRecipients } from "../data/recipient";
 import MaterialTable from "./MaterialTable";
 import { recipientEmailConverter } from "../config/constant";
+import { useNavigate } from "react-router-dom";
+import { useLoginHandler } from "../config/userLogin";
 
 function RecipientPopups({ onClose }) {
   const [toAddresses, setToAddresses] = useState("");
@@ -10,7 +12,11 @@ function RecipientPopups({ onClose }) {
   const [recipientName, setRecipientName] = useState("");
   const [recipientId, setRecipientId] = useState(null);
 
-    const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+
+  const navigate = useNavigate();
+  const { loading, isAuthenticated, userPool, getAuthenticatedUser, signOut } =
+    useLoginHandler("");
 
   const columns = [
     {
@@ -44,6 +50,9 @@ function RecipientPopups({ onClose }) {
     setTableData(recipientEmailConverter(res?.data));
   }, []);
   useEffect(() => {
+    if (!getAuthenticatedUser().getUsername()) {
+      navigate("/");
+    }
     fetchTableData();
   }, []);
 
@@ -73,9 +82,9 @@ function RecipientPopups({ onClose }) {
 
   const handleSaveClick = async () => {
     const pushData = {
-      toAddresses:toAddresses.split(','),
-      ccAddresses:ccAddresses.split(','),
-      bccAddresses:bccAddresses.split(','),
+      toAddresses: toAddresses.split(","),
+      ccAddresses: ccAddresses.split(","),
+      bccAddresses: bccAddresses.split(","),
       recipientName,
       recipientId,
     };
@@ -159,7 +168,7 @@ function RecipientPopups({ onClose }) {
           </button>
           <button onClick={handleSaveClick}>Save</button>
         </div>
-         {MaterialTable(tableData, columns)}
+        {MaterialTable(tableData, columns)}
       </div>
     </div>
   );

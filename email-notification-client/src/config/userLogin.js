@@ -31,11 +31,19 @@ export function useLoginHandler() {
   };
   console.log("I am here", getAuthenticatedUser()?.getUsername());
 
+  const setAuthenticated = () =>{
+    setstate({
+      loading: true,
+      isAuthenticated: true,
+    });
+  }
+
   return {
     loading,
     isAuthenticated,
     userPool,
     getAuthenticatedUser,
     signOut,
+    setAuthenticated,
   };
 }
