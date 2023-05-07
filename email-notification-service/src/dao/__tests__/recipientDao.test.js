@@ -85,7 +85,7 @@ describe("RecipientDao", () => {
 
     expect(result).toEqual([recipient]);
     expect(mockRecipient.findAll).toHaveBeenCalledWith({
-      where: { recipientId: recipient.recipientId },
+      where: { recipientId: recipient.recipientId, active: 1 },
       raw: true,
     });
   });

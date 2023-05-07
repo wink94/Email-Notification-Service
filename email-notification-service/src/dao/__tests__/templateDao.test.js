@@ -110,7 +110,7 @@ describe("TemplateDao", () => {
 
     expect(result).toEqual([template]);
     expect(mockTemplate.findAll).toHaveBeenCalledWith({
-      where: { templateId },
+      where: { templateId, active: 1 },
       raw: true,
     });
   });
@@ -144,14 +144,15 @@ describe("TemplateDao", () => {
       templateName: "Template12",
       templateSubject: "test1-templateSubject",
     };
-    mockTemplate.upsert.mockResolvedValue(true);
+    mockTemplate.update.mockResolvedValue(true);
 
     const result = await TemplateDao.updateTemplate(templateId, dataParams);
+    console.log("🚀 ~ file: templateDao.test.js:150 ~ it ~ result:", result)
 
     expect(result).toEqual(true);
-    expect(mockTemplate.upsert).toHaveBeenCalledWith(
+    expect(mockTemplate.update).toHaveBeenCalledWith(
       { templateId, ...dataParams },
-      { where: { templateId } }
+      { where: { templateId} }
     );
   });
 
