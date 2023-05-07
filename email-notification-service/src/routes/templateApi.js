@@ -9,7 +9,7 @@ class TemplateApi {
     this.router = new Router({ mergeParams: true });
     this.router.post('/', this.addTemplates);
     this.router.get('/', this.getAllTemplates);
-    this.router.get('/:templateiD', this.getTemplateById);
+    this.router.get('/:templateId', this.getTemplateById);
     this.router.delete('/:templateId', this.deleteTemplate);
     this.router.patch('/:templateId', this.updateTemplate);
   }

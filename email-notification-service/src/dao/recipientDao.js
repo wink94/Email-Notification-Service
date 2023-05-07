@@ -16,7 +16,7 @@ class RecipientDao {
   async getAllRecipient() {
     try {
       const recipient = getModule('recipient');
-      return recipient.findAll({ raw: true, subQuery: false });
+      return recipient.findAll({ raw: true, subQuery: false, where: { active: 1 } });
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -26,7 +26,7 @@ class RecipientDao {
     try {
       const recipient = getModule('recipient');
       return recipient.findAll({
-        where: { recipientId },
+        where: { recipientId, active: 1 },
         raw: true,
       });
     } catch (error) {
