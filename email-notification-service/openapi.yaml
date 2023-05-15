@@ -1,266 +1,1183 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: Email Notification Microservice
-  description: The API documentation for Email notification microservice APIs
-
-  license:
-    name: Apache 2.0
+  title: Programmable Web Project
   version: 1.0.0
 servers:
-  - url: http://localhost:5000/v1/notification/
-    description: DEV environnement
-  - url: http://localhost:5000/v1/notification/
-    description: QA environnement
-tags:
-  - name: Health Check
-    description: Health check related APIs
-  - name: Push Notification
-    description: Notification service related APIs
-
+  - url: http://localhost:3031
 paths:
-
-  /email/push-notification:
-    post:
+  /v1/notification/email/recipient/:
+    patch:
       tags:
-        - Push Notification
-      summary: Send a new notification task
+        - default
+      summary: Sends an Email Notification to a Recipient
+      description: |-
+        ## Operation Behavior
+          This operation allows users to send email notifications to recipients.
+
+        ### Inputs
+          The operation expects the following request body parameters:
+          - `toAddresses` (required): An array of email addresses of the recipients.
+          - `ccAddresses` (optional): An array of email addresses to be included in the CC field.
+          - `bccAddresses` (optional): An array of email addresses to be included in the BCC field.
+          - `recipientName` (required): The name of the recipient.
+
+        ### Outputs
+          The operation does not return any specific output. A successful request will result in the email notification being sent to the recipients' email addresses.
+
+        ### Behavior
+          1. The operation validates the `toAddresses` parameter to ensure it contains at least one valid email address.
+          2. If the validation passes, the operation composes the email with the provided information.
+          3. The operation sends the email using the configured email service provider or SMTP server.
+          4. If the email is successfully sent, a response with a 200 status code is returned.
+          5. If any errors occur during the email sending process, an appropriate error response with a corresponding status code is returned.
+      operationId: sendEmailNotification
+      parameters:
+        - name: toAddress
+          in: query
+          description: The email address of the recipient
+          required: true
+          schema:
+            type: string
+        - name: ccAddresses
+          in: query
+          description: The subject line of the email
+          required: true
+          schema:
+            type: string
+        - name: bccAddresses
+          in: query
+          description: The content of the email message
+          required: true
+          schema:
+            type: string
+        - name: recipientName
+          in: query
+          description: The content of the email message
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/notificationServicePostRequest'
+              type: object
+              example:
+                toAddresses:
+                  - lkspade12@gmail.com
+                ccAddresses: []
+                bccAddresses: []
+                recipientName: abc
       responses:
-        201:
-          description: successful operation
-          headers:
-            correlation-id:
-              schema:
-                type: string
-                format: uuid
-              description: correlation id (uuid)
+        '200':
+          description: Successful response
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/notificationServiceResponseBody'
-        400:
-          description: bad request
-          headers:
-            correlation-id:
-              schema:
-                type: string
-                format: uuid
-              description: correlation id (uuid)
+              examples:
+                Success:
+                  value: |-
+                    {
+                        "status": "success",
+                        "data": {
+                            "message": "Recipient updated successfully."
+                        }
+                    }
+  /v1/notification/email/recipient/19:
+    delete:
+      tags:
+        - default
+      summary: Delete a recipient
+      description: ''
+      operationId: '19'
+      responses:
+        '200':
+          description: Successful response
           content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/notificationServiceBadRequest'   
-    
-  /healthcheck:
+            application/json: {}
+        default:
+          description: Default error sample response
     get:
       tags:
-        - Health Check
-      summary: Health check root API
+        - default
+      summary: Retrieves Email Notification Recipients
+      description: |-
+        ## Operation Behavior
+          This operation retrieves the email notification recipients.
+
+        ### Inputs
+          This operation does not require any parameters.
+
+        ### Outputs
+         The operation returns a response with a list of email notification recipients.
+
+        ### Behavior
+          1. The operation retrieves the list of email notification recipients from the database.
+          2. The operation returns a response with a 200 status code and the list of recipients.
+      operationId: getEmailNotificationRecipients
       responses:
-        200:
-          description: successful operation
-          headers:
-            correlation-id:
-              schema:
-                type: string
-                format: uuid
-              description: correlation id (uuid)
+        '200':
+          description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getHealthCheckResponseBody'
-        500:
-          $ref: '#/components/responses/InternalServerError'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        recipientId:
+                          type: integer
+                        recipientName:
+                          type: string
+                        emailAddresses:
+                          type: object
+                          properties:
+                            ccAddresses:
+                              type: array
+                              items:
+                                type: string
+                            toAddresses:
+                              type: array
+                              items:
+                                type: string
+                            bccAddresses:
+                              type: array
+                              items:
+                                type: string
+                        active:
+                          type: integer
+                        createdDate:
+                          type: string
+                          format: date-time
+                        modifiedDate:
+                          type: string
+                          format: date-time
+                        links:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              rel:
+                                type: string
+                              href:
+                                type: string
+              example:
+                status: success
+                data:
+                  - recipientId: 1
+                    recipientName: abc
+                    emailAddresses:
+                      ccAddresses: []
+                      toAddresses:
+                        - lkspade@gmail.com
+                      bccAddresses: []
+                    active: 1
+                    createdDate: '2023-04-05T14:48:27.000Z'
+                    modifiedDate: '2023-05-03T09:49:38.000Z'
+                    links:
+                      - rel: self
+                        href: >-
+                          http://localhost:3031/v1/notification/email/recipient/1
+                      - rel: collection
+                        href: http://localhost:3031/v1/notification/email/recipient
+                  - recipientId: 2
+                    recipientName: abc
+                    emailAddresses:
+                      ccAddresses: []
+                      toAddresses:
+                        - lkspade12@gmail.com
+                      bccAddresses: []
+                    active: 1
+                    createdDate: '2023-04-05T14:53:04.000Z'
+                    modifiedDate: '2023-05-15T10:52:12.000Z'
+                    links:
+                      - rel: self
+                        href: >-
+                          http://localhost:3031/v1/notification/email/recipient/2
+                      - rel: collection
+                        href: http://localhost:3031/v1/notification/email/recipient
+    post:
+      tags:
+        - default
+      summary: http://localhost:3031/v1/notification/email/recipient
+      requestBody:
+        description: Request body for email recipient
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toAddresses:
+                  type: array
+                  items:
+                    type: string
+                ccAddresses:
+                  type: array
+                  items:
+                    type: string
+                bccAddresses:
+                  type: array
+                  items:
+                    type: string
+                recipientName:
+                  type: string
+                templateBody:
+                  type: object
+                  properties:
+                    Template:
+                      type: object
+                      properties:
+                        TemplateName:
+                          type: string
+                        SubjectPart:
+                          type: string
+                        HtmlPart:
+                          type: string
+                        TextPart:
+                          type: string
+              example:
+                toAddresses:
+                  - lkspade@gmail.com
+                ccAddresses: []
+                bccAddresses: []
+                recipientName: abc124545
+                templateBody:
+                  Template:
+                    TemplateName: Template2
+                    SubjectPart: '{{subject}}'
+                    HtmlPart: >-
+                      <h1>Hello {{name}},</h1><p>Are you interested in buying
+                      our {{product}}.</p>
+                    TextPart: "Dear {{name}},\r\nYour Are you interested in buying our {{product}}."
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/notification/email/template/6:
+    patch:
+      tags:
+        - default
+      summary: Update an Email Template
+      description: |-
+        ## Operation Behavior
+          This operation allows users to update an email template.
 
-    
-components:
-  responses:
-    InternalServerError:
-      description: Unexpected error
-      headers:
-        correlation-id:
+        ### Inputs
+          The operation expects the following request body parameters:
+          - `templateBody` (required): An object containing the updated template details.
+          - `templateName` (required): The name of the template.
+          - `templateSubject` (required): The subject of the template.
+
+        ### Outputs
+          The operation returns a response with a status indicating the success or failure of the template update.
+
+        ### Behavior
+          1. The operation retrieves the template with the specified `templateId` from the database.
+          2. The operation updates the template with the provided information.
+          3. If the update is successful, the operation returns a response with a 200 status code and a success message.
+          4. If any errors occur during the update process, an appropriate error response with a corresponding status code is returned.
+      operationId: updateEmailTemplate
+      parameters:
+        - name: templateBody
+          in: query
+          description: The body of the email template
+          required: true
+          schema:
+            type: object
+            properties:
+              Template:
+                type: object
+                properties:
+                  TemplateName:
+                    type: string
+                  SubjectPart:
+                    type: string
+                  HtmlPart:
+                    type: string
+                  TextPart:
+                    type: string
+        - name: templateName
+          in: query
+          description: The name of the template
+          required: true
           schema:
             type: string
-            format: uuid
-          description: correlation id (uuid)
-      content:
-        application/json:
+        - name: templateSubject
+          in: query
+          description: The subject of the template
+          required: true
           schema:
-            $ref: '#/components/schemas/InternalServerError'
-            
-  schemas:
-    notificationServicePostRequest:
-        required:
-        - applicationName
-        - emailCategory
-        - template
-        - templateData
-        - toAddresses
-        - ccAddresses
-        - bccAddresses
-        type: object
-        properties:
-          applicationName:
             type: string
-            example : "notification_service"
-          emailCategory:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                templateBody:
+                  type: object
+                  properties:
+                    Template:
+                      type: object
+                      properties:
+                        TemplateName:
+                          type: string
+                        SubjectPart:
+                          type: string
+                        HtmlPart:
+                          type: string
+                        TextPart:
+                          type: string
+                templateName:
+                  type: string
+                templateSubject:
+                  type: string
+            example:
+              templateBody:
+                Template:
+                  TemplateName: Template21
+                  SubjectPart: '{{subject}}'
+                  HtmlPart: >-
+                    <h1>Hello {{name}},</h1><p>Are you interested in buying our
+                    {{product}}.</p>
+                  TextPart: "Dear {{name}},\r\nYour Are you interested{{product}} in buying our {{product}}."
+              templateName: Template
+              templateSubject: test1-templateSubject
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+              example:
+                status: success
+                data:
+                  message: Template updated successfully.
+  /v1/notification/email/template:
+    post:
+      tags:
+        - default
+      summary: ' http://localhost:3031/v1/notification/email/template'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                templateBody:
+                  Template:
+                    TemplateName: Template21
+                    SubjectPart: '{{subject}}'
+                    HtmlPart: >-
+                      <h1>Hello {{name}},</h1><p>Are you interested in buying
+                      our {{product}}.</p>
+                    TextPart: "Dear {{name}},\r\nYour Are you interested in buying our {{product}}."
+                templateName: Template1222
+                templateSubject: test1-templateSubject
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - default
+      summary: ' http://localhost:3031/v1/notification/email/template'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/notification/email/template/4:
+    delete:
+      tags:
+        - default
+      summary: ' http://localhost:3031/v1/notification/email/template/4'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/notification/email/push-notification:
+    get:
+      summary: Sends a Notification to the Recipient
+      description: >-
+        ## Operation Behavior.
+          This operation allows users to send email notifications to recipients.  
+        ### Inputs  
+          The operation expects the
+        ### following parameters:
+              - `sender` (required): The email address of the sender. 
+              - `recipients` (required): An array of email addresses of the recipients. 
+              - `subject` (required): The subject line of the email. 
+              - `message` (required): The content of the email message. 
+              - `attachments` (optional): An array of file attachments to include in the email.  
+        ### Outputs
+          The operation does not return any specific output. A successful
+        request will result in the email notification being sent to the
+        recipients' email addresses.   ### Behavior  
+          1. The operation validates
+        the `sender` parameter to ensure it is a valid email address. 
+          2. The operation validates the `recipients` parameter to ensure it contains at least one valid email address. 
+          3. The operation validates that the `subject` and `message` parameters are not empty. 
+          4. If the validation passes, the operation composes the email with the provided information.
+          5. If attachments are specified, they are attached to the email. 
+          6. The operation sends the email using the configured email service provider or SMTP server. 
+          7. If the email is successfully sent, a response with a 200 status code is returned. 
+          8. If any errors occur during the email sending process, an appropriate error response with a corresponding status code is returned. 
+        ### Example requsts has been shown in the below
+      operationId: '1'
+      parameters:
+        - name: sender
+          in: query
+          description: The email address of the sender
+          required: true
+          schema:
             type: string
-            example: "error_notification"
-          template:
-            format: date
-            type: string
-            example : "error_notification_template"
-          templateData:
-            type: object
-            required:
-            - subject
-            - dateTime
-            - userEmail
-            - message
-            - message2
-            properties:
-              subject:
-                type: string
-                example: "Notification Email "
-              dateTime:
-                type: string
-                example: "06-02-2020 19:23:23"
-              userEmail:
-                type: string
-                example: "test@user.com"
-              message:
-                type: string
-                example: "Hello"
-              message2:
-                type: string
-                example: "Completed"
-          toAddresses:
+        - name: recipients
+          in: query
+          description: An array of email addresses of the recipients
+          required: true
+          schema:
             type: array
             items:
               type: string
-            example: ["user1@gmail.com", "user2@gmail.com", "user3@gmail.com"]
-          ccAddresses:
+        - name: subject
+          in: query
+          description: The subject line of the email
+          required: true
+          schema:
+            type: string
+        - name: message
+          in: query
+          description: The content of the email message
+          required: true
+          schema:
+            type: string
+        - name: attachments
+          in: query
+          description: An array of file attachments to include in the email
+          required: false
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                filename:
+                  type: string
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        recipientId:
+                          type: integer
+                        recipientName:
+                          type: string
+                        emailAddresses:
+                          type: object
+                          properties:
+                            ccAddresses:
+                              type: array
+                              items:
+                                type: string
+                            toAddresses:
+                              type: array
+                              items:
+                                type: string
+                            bccAddresses:
+                              type: array
+                              items:
+                                type: string
+                        active:
+                          type: integer
+                        createdDate:
+                          type: string
+                          format: date-time
+                        modifiedDate:
+                          type: string
+                          format: date-time
+                        links:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              rel:
+                                type: string
+                              href:
+                                type: string
+              examples:
+                Success:
+                  value: |-
+                    {
+                        "status": "success",
+                        "data": [
+                            {
+                                "recipientId": 1,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T14:48:27.000Z",
+                                "modifiedDate": "2023-05-03T09:49:38.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/1"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 2,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade12@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T14:53:04.000Z",
+                                "modifiedDate": "2023-05-15T10:52:12.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/2"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 3,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T14:54:08.000Z",
+                                "modifiedDate": "2023-04-05T14:54:08.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/3"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 4,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T14:58:39.000Z",
+                                "modifiedDate": "2023-04-05T14:58:39.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/4"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 5,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:00:52.000Z",
+                                "modifiedDate": "2023-04-05T15:00:52.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/5"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 6,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:07:42.000Z",
+                                "modifiedDate": "2023-04-05T15:07:42.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/6"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 7,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:11:44.000Z",
+                                "modifiedDate": "2023-04-05T15:11:44.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/7"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 10,
+                                "recipientName": "",
+                                "emailAddresses": {},
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:21:23.000Z",
+                                "modifiedDate": "2023-04-05T15:21:23.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/10"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 11,
+                                "recipientName": "",
+                                "emailAddresses": {},
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:24:28.000Z",
+                                "modifiedDate": "2023-04-05T15:24:28.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/11"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 12,
+                                "recipientName": "",
+                                "emailAddresses": {},
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:24:48.000Z",
+                                "modifiedDate": "2023-04-05T15:24:48.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/12"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 13,
+                                "recipientName": "",
+                                "emailAddresses": {},
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:25:03.000Z",
+                                "modifiedDate": "2023-04-05T15:25:03.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/13"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 14,
+                                "recipientName": "",
+                                "emailAddresses": {},
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:25:47.000Z",
+                                "modifiedDate": "2023-04-05T15:25:47.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/14"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 16,
+                                "recipientName": "Template1",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-04-05T15:32:34.000Z",
+                                "modifiedDate": "2023-04-05T15:32:34.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/16"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 17,
+                                "recipientName": "test-rec",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "abcs@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-05-01T02:20:34.000Z",
+                                "modifiedDate": "2023-05-01T02:20:34.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/17"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 18,
+                                "recipientName": "test-rec",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "abcs@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-05-01T02:23:02.000Z",
+                                "modifiedDate": "2023-05-01T02:23:02.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/18"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 20,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [
+                                        ""
+                                    ],
+                                    "toAddresses": [
+                                        "lkspade12@gmail.com",
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": [
+                                        ""
+                                    ]
+                                },
+                                "active": 1,
+                                "createdDate": "2023-05-06T14:05:14.000Z",
+                                "modifiedDate": "2023-05-06T14:07:57.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/20"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 21,
+                                "recipientName": "lk",
+                                "emailAddresses": {
+                                    "ccAddresses": [
+                                        ""
+                                    ],
+                                    "toAddresses": [
+                                        "lkspade@gmail.com"
+                                    ],
+                                    "bccAddresses": [
+                                        ""
+                                    ]
+                                },
+                                "active": 1,
+                                "createdDate": "2023-05-14T09:41:55.000Z",
+                                "modifiedDate": "2023-05-14T09:41:55.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/21"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            },
+                            {
+                                "recipientId": 22,
+                                "recipientName": "abc",
+                                "emailAddresses": {
+                                    "ccAddresses": [],
+                                    "toAddresses": [
+                                        "lkspade12@gmail.com"
+                                    ],
+                                    "bccAddresses": []
+                                },
+                                "active": 1,
+                                "createdDate": "2023-05-14T16:00:45.000Z",
+                                "modifiedDate": "2023-05-14T16:00:45.000Z",
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient/22"
+                                    },
+                                    {
+                                        "rel": "collection",
+                                        "href": "http://localhost:3031/v1/notification/email/recipient"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+        default:
+          description: Default error sample response
+    post:
+      tags:
+        - default
+      summary: Sends a Notification to the Recipient
+      description: >-
+        ## Operation Behavior.
+          This operation allows users to send email notifications to recipients.  
+        ### Inputs  
+          The operation expects the
+        ### following parameters:
+              - `sender` (required): The email address of the sender. 
+              - `recipients` (required): An array of email addresses of the recipients. 
+              - `subject` (required): The subject line of the email. 
+              - `message` (required): The content of the email message. 
+              - `attachments` (optional): An array of file attachments to include in the email.  
+        ### Outputs
+          The operation does not return any specific output. A successful
+        request will result in the email notification being sent to the
+        recipients' email addresses.   ### Behavior  
+          1. The operation validates
+        the `sender` parameter to ensure it is a valid email address. 
+          2. The operation validates the `recipients` parameter to ensure it contains at least one valid email address. 
+          3. The operation validates that the `subject` and `message` parameters are not empty. 
+          4. If the validation passes, the operation composes the email with the provided information.
+          5. If attachments are specified, they are attached to the email. 
+          6. The operation sends the email using the configured email service provider or SMTP server. 
+          7. If the email is successfully sent, a response with a 200 status code is returned. 
+          8. If any errors occur during the email sending process, an appropriate error response with a corresponding status code is returned. 
+        ### Example requsts has been shown in the below
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                applicationName: product-info
+                emailCategory: product-info
+                templateId: Template1
+                templateData:
+                  subject: ' test 1'
+                  name: ' test 1'
+                  product: tshirt XL
+                toAddresses:
+                  - achira100@gmail.com
+                  - Sameeraoulu@gmail.com
+                ccAddresses: []
+                bccAddresses: []
+      parameters:
+        - name: sender
+          in: query
+          description: The email address of the sender
+          required: true
+          schema:
+            type: string
+        - name: recipients
+          in: query
+          description: An array of email addresses of the recipients
+          required: true
+          schema:
             type: array
             items:
               type: string
-            example: ["user1@gmail.com", "user2@gmail.com", "user3@gmail.com"]
-          bccAddresses:
+        - name: subject
+          in: query
+          description: The subject line of the email
+          required: true
+          schema:
+            type: string
+        - name: message
+          in: query
+          description: The content of the email message
+          required: true
+          schema:
+            type: string
+        - name: attachments
+          in: query
+          description: An array of file attachments to include in the email
+          required: false
+          schema:
             type: array
             items:
-              type: string
-            example: ["user1@gmail.com", "user2@gmail.com", "user3@gmail.com"]
+              type: object
+              properties:
+                filename:
+                  type: string
+                content:
+                  type: string
+      responses:
+        '204':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                Successfully sent:
+                  value: |-
+                    {
+                        "status": "success",
+                        "data": {
+                            "requestId": "a0e04664-1ef7-455f-b64f-71d1946a23c1",
+                            "isSuccess": true,
+                            "message": "localhost"
+                        }
+                    }
+        '400':
+          description: Bad request. Invalid or missing parameters.
+          content:
+            application/json:
+              examples:
+                Not Found:
+                  value: |-
+                    {
+                        "status": "error",
+                        "data": {
+                            "message": "Bad request",
+                            "errorCode": "400",
+                            "details": "The request is invalid or missing required parameters."
+                        }
+                    }
+        '404':
+          description: Not found. The specified notification does not exist.
+          content:
+            application/json:
+              examples:
+                Resource Not Found:
+                  value: |-
+                    {
+                        "status": "error",
+                        "data": {
+                            "message": "Resource not found",
+                            "errorCode": "404",
+                            "details": "The requested resource could not be found."
+                        }
+                    }
+        '500':
+          description: >-
+            Internal server error. An error occurred during the deletion
+            process.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                      isSuccess:
+                        type: boolean
+                      message:
+                        type: string
+              examples:
+                Internal Server Error:
+                  value: |-
+                    {
+                        "status": "error",
+                        "data": {
+                            "message": "Internal server error",
+                            "errorCode": "500",
+                            "details": "An unexpected error occurred on the server."
+                        }
+                    }
+    delete:
+      summary: Deletes a Notification
+      description: >
+        ## Operation Behavior
+
+        This operation allows users to delete a specific email notification.
 
 
-    notificationServiceResponseBody:
-      required:
-        - status
-        - data
-      type: object
-      properties:
-        status:
-          type: string
-          example: "success"
-        data:
-          type: array
-          items:
-            required:
-            - requestId
-            - isSuccess
-            type: object
-            properties:
-              requestId:
-                type: string
-                example: "b57ca4ce-be31-4d5a-878d-3fafc3724e14"
-              isSuccess:
-                type: boolean
-                example: true
+        ### Inputs
 
-    HealthCheckResponseObject:
-      required:
-        - uptime
-        - memoryUsage
-        - nodeVersion
-        - nodeEnv
-        - versionId
-      type: object
-      properties:
-        uptime:
-          type: number
-          example: 374.49
-        memoryUsage:
-          type: object
-          properties:
-            rss:
-              type: number
-              example: 83775488
-            heapTotal:
-              type: number
-              example: 64307200
-            heapUsed:
-              type: number
-              example: 33764816
-            external:
-              type: number
-              example: 1329499
-        nodeVersion:
-          type: string
-          example: "10.19.0"
-        nodeEnv:
-          type: string
-          example: "production"
-        versionId:
-         type: string
-         example: "123DSye"
+        The operation expects the following parameters:
 
-    getHealthCheckResponseBody:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-            - success
-            - error
-        data:
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/HealthCheckResponseObject'
-    InternalServerError:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-            - error
-          example: error
-        data:
-          type: object
-          properties:
-            message:
-              type: string
-              example: 'Internal server error'
-            correlationId:
-              type: string
-              example: "a92f273a-58b3-443c-97a6-e9498d461ef2"  
+        - `notificationId` (required): The ID of the notification to delete.
 
-          
-    notificationServiceBadRequest:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-            - error
-          example: error
-        data:
-          type: object
-          properties:
-            message:
-              type: string
-              example: "should have required property 'applicationName'"
-            correlationId:
-              type: string
-              example: "a92f273a-58b3-443c-97a6-e9498d461ef2"
+
+        ### Outputs
+
+        The operation does not return any specific output. A successful request
+        will result in the deletion of the specified email notification.
+
+
+        ### Behavior
+
+        1. The operation validates the `notificationId` parameter to ensure it
+        is a valid ID.
+
+        2. If the validation passes, the operation deletes the specified email
+        notification.
+
+        3. If the deletion is successful, a response with a 204 status code is
+        returned.
+
+        4. If the specified notification does not exist or any errors occur
+        during the deletion process, an appropriate error response with a
+        corresponding status code is returned.
+      operationId: deleteEmailNotification
+      parameters:
+        - name: notificationId
+          in: query
+          description: The ID of the notification to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successful response
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      requestId:
+                        type: string
+                      isSuccess:
+                        type: boolean
+                      message:
+                        type: string

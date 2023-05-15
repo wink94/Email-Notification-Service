@@ -1,7 +1,3 @@
-
-
-export const cognitoAuthorizer = () => {
-    return async (req,res,next)=>{
-        next();
-    }
+export const cognitoAuthorizer = () => async (req, res, next) => {
+  next();
 };

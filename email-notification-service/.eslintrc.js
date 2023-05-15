@@ -3,18 +3,19 @@ module.exports = {
     node: true,
     es2020: true,
   },
-  parser: '@babel/eslint-parser',
+  parser: "@babel/eslint-parser",
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: 'module',
+    sourceType: "module",
   },
-  extends: ['eslint:recommended', 'airbnb-base'],
-  ignorePatterns: ['**/*.test.js'],
+  extends: ["eslint:recommended", "airbnb-base"],
+  ignorePatterns: ["**/*.test.js", "**/__mock__"],
   rules: {
-    'class-methods-use-this': 'off',
-    'import/prefer-default-export': 'off',
-    'import/no-import-module-exports': 'off',
-    'linebreak-style': ['error', 'windows'],
+    "class-methods-use-this": "off",
+    "import/prefer-default-export": "off",
+    "import/no-import-module-exports": "off",
+    "linebreak-style": ["error", "windows"],
+    "func-names": "off"
   },
   globals: {
     jest: false,
