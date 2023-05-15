@@ -96,7 +96,7 @@ function RecipientPopups({ onClose }) {
     try {
       const token = accessToken || getAccessTokenFromStorage();
       if (recipientId) {
-        const res = await deleteRecipients(recipientId,token);
+        const res = await deleteRecipients(recipientId, token);
         alert("Recipient deleted");
       } else {
         alert("Recipient error");
@@ -108,9 +108,9 @@ function RecipientPopups({ onClose }) {
 
   const handleSaveClick = async () => {
     const pushData = {
-      toAddresses: toAddresses.split(","),
-      ccAddresses: ccAddresses.split(","),
-      bccAddresses: bccAddresses.split(","),
+      toAddresses: toAddresses === "" ? [] : toAddresses.split(","),
+      ccAddresses: ccAddresses === "" ? [] : ccAddresses.split(","),
+      bccAddresses: bccAddresses === "" ? [] : bccAddresses.split(","),
       recipientName,
       recipientId,
     };
@@ -118,7 +118,10 @@ function RecipientPopups({ onClose }) {
     try {
       let response = { data: { isSuccess: false } };
       const token = accessToken || getAccessTokenFromStorage();
-      console.log("🚀 ~ file: RecipientsPopup.js:126 ~ handleSaveClick ~ token:", token)
+      console.log(
+        "🚀 ~ file: RecipientsPopup.js:126 ~ handleSaveClick ~ token:",
+        token
+      );
       if (!recipientId) {
         response = await addRecipient(pushData, "add", token);
         console.log(
