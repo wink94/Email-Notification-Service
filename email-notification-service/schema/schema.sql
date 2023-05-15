@@ -37,4 +37,4 @@ CREATE TABLE `template` (
 )
 
 ALTER TABLE email_notification_audit
-ADD FOREIGN KEY (template_id) REFERENCES template(template);
+ADD FOREIGN KEY (template_id) REFERENCES template(template_id);
