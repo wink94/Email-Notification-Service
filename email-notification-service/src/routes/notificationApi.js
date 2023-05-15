@@ -3,14 +3,21 @@ import HttpStatus from 'http-status-codes';
 import { sesServiceRequestDTO } from '../dto/sesServiceRequestDTO';
 import notificationService from '../services/notification/notificationService';
 import emailAuditDao from '../dao/emailAuditDao';
-import { createErrorResponse, createSuccessResponse } from '../util/responseGenerator';
+import {
+  createErrorResponse,
+  createSuccessResponse,
+} from '../util/responseGenerator';
+import { generateResourceLinks } from '../util/helpers';
 
 class NotificationApi {
   constructor() {
     this.router = new Router({ mergeParams: true });
     this.router.post('/', this.pushNotification);
     this.router.get('/', this.getAllEmailAudits);
-    this.router.get('/email-subject/:emailSubject', this.getEmailAuditBySubject);
+    this.router.get(
+      '/email-subject/:emailSubject',
+      this.getEmailAuditBySubject,
+    );
   }
 
   /**
@@ -26,9 +33,13 @@ class NotificationApi {
       );
 
       if (response.isSuccess) {
-        res.status(HttpStatus.ACCEPTED).send(createSuccessResponse(response.payLoad, null));
+        res
+          .status(HttpStatus.ACCEPTED)
+          .send(createSuccessResponse(response.payLoad, req.hostname));
       } else {
-        res.status(HttpStatus.BAD_REQUEST).send(createErrorResponse(null, response.payLoad));
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .send(createErrorResponse(null, response.payLoad));
       }
     } catch (error) {
       next(error);
@@ -38,7 +49,16 @@ class NotificationApi {
   async getAllEmailAudits(req, res, next) {
     try {
       const data = await emailAuditDao.getAllEmailAuditEntry();
-      res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
+      const hypermediaAddedData = data.map((email) => ({
+        ...email,
+        links: generateResourceLinks(
+          req,
+          email.emailNotificationAuditPrimaryId,
+        ),
+      }));
+      res
+        .status(HttpStatus.OK)
+        .send(createSuccessResponse(hypermediaAddedData, null));
     } catch (error) {
       next(error);
     }
@@ -47,7 +67,9 @@ class NotificationApi {
   async getEmailAuditBySubject(req, res, next) {
     try {
       const { emailSubject } = req.params;
-      const data = await emailAuditDao.getEmailAuditByEmailSubject(emailSubject);
+      const data = await emailAuditDao.getEmailAuditByEmailSubject(
+        emailSubject,
+      );
       res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
     } catch (error) {
       next(error);

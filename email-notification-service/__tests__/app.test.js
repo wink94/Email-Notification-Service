@@ -3,6 +3,14 @@ import HttpStatus from 'http-status-codes';
 // eslint-disable-next-line import/named
 import { app } from '../src/app';
 
+// This should be in your test file
+jest.mock("../src/middleware/cognitoAuth", () => ({
+  ...jest.requireActual("../src/middleware/cognitoAuth"),
+  cognitoAuthorizer: () => async (req, res, next) => {
+    next();
+  },
+}));
+
 describe('app test', () => {
   beforeEach(() => {
     jest.resetModules();
