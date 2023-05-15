@@ -1,6 +1,19 @@
 import { StandardRetryStrategy } from '@aws-sdk/middleware-retry';
-import { BACK_OFF_RATIO, INITIAL_DELAY, MAX_ATTEMPTS } from './constant';
+import {
+  BACK_OFF_RATIO, INITIAL_DELAY, MAX_ATTEMPTS, PORT,
+} from './constant';
 import logger from './logger';
+
+export const generateResourceLinks = (req, resource = '') => [
+  {
+    rel: 'self',
+    href: `http://${req.hostname}:${PORT}${req.baseUrl}/${resource}`,
+  },
+  {
+    rel: 'collection',
+    href: `http://${req.hostname}:${PORT}${req.baseUrl}`,
+  },
+];
 
 export const base64Decode = (data) => Buffer.from(data, 'base64').toString();
 

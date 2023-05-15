@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { addtemplate, getTemplate } from "../data/template";
-import { getRecipients } from "../data/recipient";
+import { useTokenStore } from "../App";
+import { addtemplate, deleteTemplate, getTemplate } from "../data/template";
 import MaterialTable from "./MaterialTable";
 
 function TemplatePopup({ onClose }) {
@@ -9,7 +9,7 @@ function TemplatePopup({ onClose }) {
   const [templateBody, setTemplateBody] = useState("");
   const [templateId, setTemplateId] = useState(null);
   const [tableData, setTableData] = useState([]);
-
+  const { accessToken, user, getAccessTokenFromStorage } = useTokenStore();
   const columns = [
     {
       name: "id",
@@ -38,7 +38,8 @@ function TemplatePopup({ onClose }) {
   ];
 
   const fetchTableData = useCallback(async () => {
-    const res = await getTemplate();
+    const token = accessToken || getAccessTokenFromStorage();
+    const res = await getTemplate(token);
     setTableData(res?.data);
   }, []);
   useEffect(() => {
@@ -88,6 +89,20 @@ function TemplatePopup({ onClose }) {
     onClose();
   };
 
+  const handleDeleteClick = async () => {
+    try {
+      const token = accessToken || getAccessTokenFromStorage();
+      if (templateId) {
+        const res = await deleteTemplate(templateId, token);
+        alert("Template deleted");
+      } else {
+        alert("Template error");
+      }
+    } catch (error) {
+      alert("Template error");
+    }
+  };
+
   const handleSaveClick = async () => {
     const templateDataObject = formFields.reduce((acc, { name, value }) => {
       acc[name] = value;
@@ -102,15 +117,16 @@ function TemplatePopup({ onClose }) {
     };
 
     try {
+      const token = accessToken || getAccessTokenFromStorage();
       let response = { data: { isSuccess: false } };
       if (!templateId) {
-        response = await addtemplate(pushData, "add");
+        response = await addtemplate(pushData, "add", token);
         console.log(
           "🚀 ~ file: TemplatePopup.js:70 ~ handleSaveClick ~ response:",
           response
         );
       } else {
-        response = await addtemplate(pushData, "update");
+        response = await addtemplate(pushData, "update", token);
       }
       if (response.status === "success") {
         alert("Template added success");
@@ -124,11 +140,11 @@ function TemplatePopup({ onClose }) {
 
   return (
     <div className="email-form App popup-overlay">
-      <div className="popup">
+      <div className="email-form-body">
         <h3>Manage Template</h3>
         <div className="popup-body">
           <div className="popup-input">
-            <label htmlFor="template-name-input">{`Template Id (optinal):`}</label>
+            <label htmlFor="template-name-input">{`Template Id (optional):`}</label>
             <input
               type="text"
               id="template-name-input"
@@ -195,6 +211,7 @@ function TemplatePopup({ onClose }) {
           </div>
         </div>
         <div className="popup-buttons">
+          <button onClick={handleDeleteClick}>Delete</button>
           <button onClick={(event) => (window.location.href = "/app")}>
             Cancel
           </button>

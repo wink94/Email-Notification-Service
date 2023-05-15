@@ -13,6 +13,7 @@ import { createSuccessResponse } from './util/responseGenerator';
 import { base64Decode } from './util/helpers';
 import contextMiddleware from './middleware/context';
 import initializer from './initializer';
+import { cognitoAuthorizer } from './middleware/cognitoAuth';
 
 const app = express();
 
@@ -57,6 +58,8 @@ app.get('/v1/notification/healthcheck', (req, res) => {
   };
   res.status(HttpStatus.OK).json(createSuccessResponse(health));
 });
+
+app.use(cognitoAuthorizer());
 
 // Set Express router with API version prefix
 app.use('/v1/notification/', router);

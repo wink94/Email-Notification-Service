@@ -1,5 +1,9 @@
 import {
-  SESClient, SendTemplatedEmailCommand, TestRenderTemplateCommand,
+  CreateTemplateCommand,
+  SESClient,
+  SendTemplatedEmailCommand,
+  TestRenderTemplateCommand,
+  UpdateTemplateCommand,
 } from '@aws-sdk/client-ses';
 import { SES_EXCEPTIONS } from '../../exceptions/exceptionCodes';
 import SESException from '../../exceptions/SESException';
@@ -11,6 +15,28 @@ import emailAuditService from '../notification/emailAuditService';
 class SESService {
   constructor() {
     this.ses = new SESClient({ region: 'us-east-1' });
+  }
+
+  async saveTemplate(data) {
+    try {
+      const command = new CreateTemplateCommand(data.templateBody);
+      const response = await this.ses.send(command);
+      return response;
+    } catch (error) {
+      logger.error(error);
+      throw error;
+    }
+  }
+
+  async updateTemplate(data) {
+    try {
+      const command = new UpdateTemplateCommand(data.templateBody);
+      const response = await this.ses.send(command);
+      return response;
+    } catch (error) {
+      logger.error(error);
+      throw error;
+    }
   }
 
   async sendNotification(event, attempt = 0) {

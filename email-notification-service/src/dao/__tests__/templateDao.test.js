@@ -4,7 +4,7 @@ import DBException from "../../exceptions/DBException";
 
 jest.mock("../../models/index");
 jest.mock("../../exceptions/DBException");
-
+jest.mock("../../services/sesService/sesService")
 describe("TemplateDao", () => {
   const mockTemplate = {
     create: jest.fn(),

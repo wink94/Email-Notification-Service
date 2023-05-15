@@ -1,9 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { addRecipient, getRecipients } from "../data/recipient";
-import MaterialTable from "./MaterialTable";
-import { recipientEmailConverter } from "../config/constant";
 import { useNavigate } from "react-router-dom";
+import { useTokenStore } from "../App";
+import "../App.css";
+import { recipientEmailConverter } from "../config/constant";
 import { useLoginHandler } from "../config/userLogin";
+import {
+  addRecipient,
+  deleteRecipients,
+  getRecipients,
+} from "../data/recipient";
+import "./EmailForm.css";
+import MaterialTable from "./MaterialTable";
+import "./Popup.css";
 
 function RecipientPopups({ onClose }) {
   const [toAddresses, setToAddresses] = useState("");
@@ -13,6 +21,7 @@ function RecipientPopups({ onClose }) {
   const [recipientId, setRecipientId] = useState(null);
 
   const [tableData, setTableData] = useState([]);
+  const { accessToken, user, getAccessTokenFromStorage } = useTokenStore();
 
   const navigate = useNavigate();
   const { loading, isAuthenticated, userPool, getAuthenticatedUser, signOut } =
@@ -46,7 +55,10 @@ function RecipientPopups({ onClose }) {
   ];
 
   const fetchTableData = useCallback(async () => {
-    const res = await getRecipients();
+    const token = accessToken || getAccessTokenFromStorage();
+
+    const res = await getRecipients(token);
+
     setTableData(recipientEmailConverter(res?.data));
   }, []);
   useEffect(() => {
@@ -80,6 +92,20 @@ function RecipientPopups({ onClose }) {
     onClose();
   };
 
+  const handleDeleteClick = async () => {
+    try {
+      const token = accessToken || getAccessTokenFromStorage();
+      if (recipientId) {
+        const res = await deleteRecipients(recipientId,token);
+        alert("Recipient deleted");
+      } else {
+        alert("Recipient error");
+      }
+    } catch (error) {
+      alert("Recipient error");
+    }
+  };
+
   const handleSaveClick = async () => {
     const pushData = {
       toAddresses: toAddresses.split(","),
@@ -91,14 +117,16 @@ function RecipientPopups({ onClose }) {
 
     try {
       let response = { data: { isSuccess: false } };
+      const token = accessToken || getAccessTokenFromStorage();
+      console.log("🚀 ~ file: RecipientsPopup.js:126 ~ handleSaveClick ~ token:", token)
       if (!recipientId) {
-        response = await addRecipient(pushData, "add");
+        response = await addRecipient(pushData, "add", token);
         console.log(
           "🚀 ~ file: RecipientPopup.js:70 ~ handleSaveClick ~ response:",
           response
         );
       } else {
-        response = await addRecipient(pushData, "update");
+        response = await addRecipient(pushData, "update", token);
       }
       if (response.status === "success") {
         alert("Recipient added success");
@@ -111,8 +139,8 @@ function RecipientPopups({ onClose }) {
   };
 
   return (
-    <div className="email-form App popup-overlay">
-      <div className="popup">
+    <div className="email-form App ">
+      <div className="email-form-body">
         <h3>Manage Recipients</h3>
         <div className="popup-body">
           <div className="popup-input">
@@ -163,6 +191,7 @@ function RecipientPopups({ onClose }) {
           </div>
         </div>
         <div className="popup-buttons">
+          <button onClick={handleDeleteClick}>Delete</button>
           <button onClick={(event) => (window.location.href = "/app")}>
             Cancel
           </button>

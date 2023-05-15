@@ -61,8 +61,11 @@ describe('NotificationApi', () => {
 
       expect(response.status).toEqual(HttpStatus.ACCEPTED);
       expect(response.body).toStrictEqual({
-        status: 'success',
-        data: { requestId: '1aaee205-fbbf-436f-881d-c98325c33806' },
+        status: "success",
+        data: {
+          requestId: "1aaee205-fbbf-436f-881d-c98325c33806",
+          message: "127.0.0.1",
+        },
       });
     });
 

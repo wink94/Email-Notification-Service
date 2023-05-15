@@ -1,13 +1,14 @@
 import DBException from '../exceptions/DBException';
 import { getModule } from '../models/index';
+import sesService from '../services/sesService/sesService';
 
 class TemplateDao {
   async insertTemplate(dataParams) {
     try {
+      await sesService.saveTemplate(dataParams);
+
       const template = getModule('template');
-      return template.create(
-        dataParams,
-      );
+      return template.create(dataParams);
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -16,7 +17,11 @@ class TemplateDao {
   async getAllTemplates() {
     try {
       const template = getModule('template');
-      return template.findAll({ raw: true, subQuery: false, where: { active: 1 } });
+      return template.findAll({
+        raw: true,
+        subQuery: false,
+        where: { active: 1 },
+      });
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -37,10 +42,7 @@ class TemplateDao {
   async deleteTemplate(templateId) {
     try {
       const template = getModule('template');
-      return template.update(
-        { active: 0 },
-        { where: { templateId } },
-      );
+      return template.update({ active: 0 }, { where: { templateId } });
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -48,10 +50,11 @@ class TemplateDao {
 
   async updateTemplate(templateId, dataParams) {
     try {
+      await sesService.updateTemplate(dataParams);
+
       const template = getModule('template');
       return template.update(
         {
-
           ...dataParams,
           templateId,
         },

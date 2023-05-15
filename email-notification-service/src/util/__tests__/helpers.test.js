@@ -1,5 +1,6 @@
+import { PORT } from '../constant';
 import {
-  base64Decode, base64Encode, sleep, awsRetryConfigGenerator,
+  base64Decode, base64Encode, sleep, awsRetryConfigGenerator,generateResourceLinks
 } from '../helpers';
 
 test('should return decoded base 64 string', async () => {
@@ -68,5 +69,53 @@ describe('util/helper: awsRetryConfigGenerator', () => {
     expect(configs.retryStrategy.delayDecider(100, 2)).toEqual(1500);
     const maxAttempts = await configs.retryStrategy.maxAttemptsProvider();
     expect(maxAttempts).toEqual(1);
+  });
+});
+
+
+describe("generateResourceLinks", () => {
+  it("should generate correct resource links", () => {
+    const mockReq = {
+      hostname: "localhost",
+      baseUrl: "/api",
+    };
+
+    const resource = "test";
+    const expectedLinks = [
+      {
+        rel: "self",
+        href: `http://${mockReq.hostname}:${PORT}${mockReq.baseUrl}/${resource}`,
+      },
+      {
+        rel: "collection",
+        href: `http://${mockReq.hostname}:${PORT}${mockReq.baseUrl}`,
+      },
+    ];
+
+    const links = generateResourceLinks(mockReq, resource);
+
+    expect(links).toEqual(expectedLinks);
+  });
+
+  it("should generate correct resource links when resource is not specified", () => {
+    const mockReq = {
+      hostname: "localhost",
+      baseUrl: "/api",
+    };
+
+    const expectedLinks = [
+      {
+        rel: "self",
+        href: `http://${mockReq.hostname}:${PORT}${mockReq.baseUrl}/`,
+      },
+      {
+        rel: "collection",
+        href: `http://${mockReq.hostname}:${PORT}${mockReq.baseUrl}`,
+      },
+    ];
+
+    const links = generateResourceLinks(mockReq);
+
+    expect(links).toEqual(expectedLinks);
   });
 });

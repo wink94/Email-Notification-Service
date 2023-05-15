@@ -1,11 +1,12 @@
 import DataTypes from 'sequelize';
 import DbManager from '../config/dbManager';
+import logger from '../util/logger';
 
 const models = {};
 const modelFiles = ['emailNotificationAudit', 'recipient', 'template'];
 
 export const modelInitializer = async () => {
-  console.info('model initialization start');
+  logger.info('model initialization start');
   const sequelize = DbManager.getConnectionPool();
 
   modelFiles.forEach((file) => {
@@ -15,7 +16,7 @@ export const modelInitializer = async () => {
     );
     models[sequelizeModel.name] = sequelizeModel;
   });
-  console.info('model initialization complete');
+  logger.info('model initialization complete');
 
   return 'done';
 };
