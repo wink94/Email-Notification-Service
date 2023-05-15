@@ -5,6 +5,8 @@
 
 ### Installation
 * Install NodeJS 16.xx
+* Install Mysql 8
+* Install AWS CLI (optional)
 
 ### Start API
 * cd email-notification-service/
@@ -24,6 +26,10 @@
 aws create-template --template <value>
 ### authenticate user manual template to aws
 aws cognito-idp admin-set-user-password --user-pool-id YOUR_USER_POOL_ID --username test@gmail.com --password "test-123" --permanent
+
+### Setup DB
+* Install Mysql 8
+* execute `schema.sql`
 
 
 
