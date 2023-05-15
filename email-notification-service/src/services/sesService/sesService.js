@@ -105,7 +105,7 @@ class SESService {
           isSuccess: false,
         };
       }
-      if (attempt < 8) {
+      if (attempt < 3) {
         const nextAttempt = attempt + 1;
         const waitTime = nextAttempt * 2 + Math.floor(Math.random() * 4);
         logger.info(

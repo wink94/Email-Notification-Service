@@ -219,7 +219,7 @@ describe("services: notificationService : pushNotification", () => {
     });
   });
 
-  test("pushNotification should return SESException after 9 attempts ", async () => {
+  test("pushNotification should return SESException after 4 attempts ", async () => {
     const templateData = {
       subject: "abc abc Posting – Job Status",
       userEmail: "test@user.com",
@@ -246,7 +246,7 @@ describe("services: notificationService : pushNotification", () => {
     await expect(sesService.sendNotification(jsonObj)).rejects.toThrow(
       SESException
     );
-    expect(sendNotificationSpy).toHaveBeenCalledTimes(9);
+    expect(sendNotificationSpy).toHaveBeenCalledTimes(4);
   });
   test("testRenderTemplate should return success status ", async () => {
     const templateData = {
