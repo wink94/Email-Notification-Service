@@ -1,4 +1,4 @@
-service: email-notification-ms-v1
+service: email-notification-service
 
 frameworkVersion: '3'
 configValidationMode: error
