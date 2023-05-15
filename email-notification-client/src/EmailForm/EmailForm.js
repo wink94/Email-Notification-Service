@@ -1,16 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "./EmailForm.css";
+import { useNavigate } from "react-router-dom";
+import { useTokenStore } from "../App";
 import "../App.css";
-import "./Popup.css";
-import RecipientWindow from "./RecipientsPopup.js";
-import TemplateWindow from "./TemplatePopup.js";
+import { useLoginHandler } from "../config/userLogin";
 import {
   getAllEmailAuditEntry,
   pushEmailNotification,
 } from "../data/emailPush";
+import "./EmailForm.css";
 import MaterialTable from "./MaterialTable";
-import { redirect, useNavigate } from "react-router-dom";
-import { useLoginHandler } from "../config/userLogin";
+import "./Popup.css";
+import RecipientWindow from "./RecipientsPopup.js";
+import TemplateWindow from "./TemplatePopup.js";
 
 function EmailForm() {
   const [applicationName, setApplicationName] = useState("");
@@ -18,11 +19,24 @@ function EmailForm() {
   const [templateId, setTemplateId] = useState("");
   const [emailData, setEmailData] = useState([]);
   const navigate = useNavigate();
-  const { loading, isAuthenticated, userPool, getAuthenticatedUser, signOut,setAuthenticated } =
-    useLoginHandler("");
+  const {
+    loading,
+    isAuthenticated,
+    userPool,
+    getAuthenticatedUser,
+    signOut,
+    setAuthenticated,
+  } = useLoginHandler("");
+  const { accessToken, user, getAccessTokenFromStorage,getUserTokenFromStorage } = useTokenStore();
+  console.log(
+    "🚀 ~ file: EmailForm.js:35 ~ EmailForm ~ accessToken:",
+    accessToken
+  );
 
   const fetchEmailAudit = useCallback(async () => {
-    const res = await getAllEmailAuditEntry();
+    const token = accessToken || getAccessTokenFromStorage();
+    console.log("🚀 ~ file: EmailForm.js:39 ~ fetchEmailAudit ~ token:", token)
+    const res = await getAllEmailAuditEntry(token);
     setEmailData(res?.data);
   }, []);
   useEffect(() => {
@@ -90,13 +104,11 @@ function EmailForm() {
       templateData: templateDataObject,
       recipientId: 1,
     };
-
+    const token = accessToken || getAccessTokenFromStorage();
+    console.log("🚀 ~ file: EmailForm.js:108 ~ handleSendEmail ~ token:", token)
     try {
-      const response = await pushEmailNotification(emailPushData);
-      console.log(
-        "🚀 ~ file: EmailForm.js:92 ~ handleSendEmail ~ response:",
-        response
-      );
+      const response = await pushEmailNotification(emailPushData, token);
+
       if (response.data.isSuccess) {
         alert("Email sent success");
       } else {
@@ -116,6 +128,19 @@ function EmailForm() {
     // setShowRecipientPopup(true);
     navigate("/app/recipient");
   };
+
+  const handleCopytoClipboard=async ()=>{
+     try {
+      const token = accessToken || getAccessTokenFromStorage();
+      if (token) {
+        await navigator.clipboard.writeText(token);
+        alert("Copied!");
+      }
+     
+    } catch (err) {
+      alert("Failed to copy!");
+    }
+  }
 
   const handlePopupClose = () => {
     setShowTemplatePopup(false);
@@ -153,11 +178,22 @@ function EmailForm() {
     <div className="email-form App">
       <div className="email-form-header">
         <h2>Email Notification Service</h2>
+
         <div className="email-form-buttons">
-          <button onClick={handleManageTemplatesClick}>Manage Templates</button>
-          <button onClick={handleManageRecipientsClick}>
-            Manage Recipients
+          <button onClick={handleCopytoClipboard}>
+            Copy token to clipboard
           </button>
+          {(user === "spade" ||
+            getUserTokenFromStorage() === "spade") && (
+              <>
+                <button onClick={handleManageTemplatesClick}>
+                  Manage Templates
+                </button>
+                <button onClick={handleManageRecipientsClick}>
+                  Manage Recipients
+                </button>
+              </>
+            )}
         </div>
       </div>
       <div className="email-form-body">

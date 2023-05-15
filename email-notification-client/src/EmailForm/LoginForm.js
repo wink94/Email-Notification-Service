@@ -1,16 +1,24 @@
+import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import React, { useState } from "react";
-import { useLoginHandler, Pool_Data } from "../config/userLogin";
-import { redirect,useNavigate  } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { shallow } from "zustand/shallow";
+import { useTokenStore } from "../App";
+import { useLoginHandler } from "../config/userLogin";
 import "./EmailForm.css";
 import "./Popup.css";
-import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
+
 
 function LoginForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const {loading, isAuthenticated, userPool, getAuthenticatedUser, signOut,setAuthenticated} = useLoginHandler("");
   const navigate = useNavigate()
+
+  const [accessToken, setAccessToken, setUser] = useTokenStore(
+    (state) => [state.accessToken, state.setAccessToken, state.setUser],shallow
+    
+  );
+
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -39,17 +47,19 @@ function LoginForm() {
 
     user.authenticateUser(authDetails, {
       onSuccess: (result) => {
-        console.log("login success", result);
+        console.log("login success", result.getIdToken().getJwtToken());
+        setAccessToken(result.getIdToken().getJwtToken());
+        setUser(email)
         setAuthenticated()
         navigate('/app')
       },
       onFailure: (err) => {
         console.log("login failure", err);
+        alert("login failure");
       },
       newPasswordRequired: (data) => {
         console.log("new password required", data);
-        setAuthenticated()
-        navigate('/app')
+        alert("new password required");
       },
     });
   };
@@ -73,7 +83,7 @@ function LoginForm() {
         <div className="email-form-input">
           <label htmlFor="emailCategory-input">Password:</label>
           <input
-            type="text"
+            type="password"
             id="emailCategory-input"
             value={password}
             onChange={handlePasswordChange}

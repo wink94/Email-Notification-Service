@@ -5,9 +5,7 @@ class RecipientDao {
   async insertRecipients(dataParams) {
     try {
       const recipient = getModule('recipient');
-      return recipient.create(
-        dataParams,
-      );
+      return recipient.create(dataParams);
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -16,7 +14,11 @@ class RecipientDao {
   async getAllRecipient() {
     try {
       const recipient = getModule('recipient');
-      return recipient.findAll({ raw: true, subQuery: false, where: { active: 1 } });
+      return recipient.findAll({
+        raw: true,
+        subQuery: false,
+        where: { active: 1 },
+      });
     } catch (error) {
       throw new DBException(error.toString());
     }
@@ -37,10 +39,7 @@ class RecipientDao {
   async deleteRecipient(recipientId) {
     try {
       const recipient = getModule('recipient');
-      return recipient.update(
-        { active: 0 },
-        { where: { recipientId } },
-      );
+      return recipient.update({ active: 0 }, { where: { recipientId } });
     } catch (error) {
       throw new DBException(error.toString());
     }

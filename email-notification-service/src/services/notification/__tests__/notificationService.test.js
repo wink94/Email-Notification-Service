@@ -141,8 +141,9 @@ describe('services: notificationService : pushNotification', () => {
   });
   test('pushNotification should return failed status ', async () => {
     sesService.sendNotification = () => ({
-      requestId: '1aaee205-fbbf-436f-881d-c98325c33807',
+      // requestId: '1aaee205-fbbf-436f-881d-c98325c33807',
       isSuccess: false,
+      code:123
     });
     const jsonBody = {
       applicationName: 'abc_gl_posting_ms',

@@ -2,16 +2,20 @@
 # Email Notification Service
 
 ## How to start the application
-### start API
+
+### Installation
+* Install NodeJS 16.xx
+
+### Start API
 * cd email-notification-service/
 * npm install
 * npm start
-### run test API
+### Run Tests
 * npm test
 
-### run lint fix API
+### Run Lint Fixing
 * npm run eslint-fix
-### start Web App
+### Start Web App
 * cd email-notification-client/
 * npm install
 * npm start

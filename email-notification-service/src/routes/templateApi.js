@@ -2,6 +2,7 @@ import { Router } from 'express';
 import HttpStatus from 'http-status-codes';
 import templateDao from '../dao/templateDao';
 import { mapTemplateRequestBody } from '../dto/templateDTO';
+import { generateResourceLinks } from '../util/helpers';
 import { createSuccessResponse } from '../util/responseGenerator';
 
 class TemplateApi {
@@ -16,7 +17,9 @@ class TemplateApi {
 
   async addTemplates(req, res, next) {
     try {
-      const data = await templateDao.insertTemplate(mapTemplateRequestBody(req.body));
+      const data = await templateDao.insertTemplate(
+        mapTemplateRequestBody(req.body),
+      );
       res.status(HttpStatus.CREATED).send(createSuccessResponse(data, null));
     } catch (error) {
       next(error);
@@ -26,7 +29,14 @@ class TemplateApi {
   async getAllTemplates(req, res, next) {
     try {
       const data = await templateDao.getAllTemplates();
-      res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
+
+      const hypermediaAddedData = data.map((template) => ({
+        ...template,
+        links: generateResourceLinks(req, template.templateId),
+      }));
+      res
+        .status(HttpStatus.OK)
+        .send(createSuccessResponse(hypermediaAddedData, null));
     } catch (error) {
       next(error);
     }
@@ -35,7 +45,10 @@ class TemplateApi {
   async getTemplateById(req, res, next) {
     try {
       const data = await templateDao.getTemplate(req.params.templateId);
-      res.status(HttpStatus.OK).send(createSuccessResponse(data, null));
+      res.status(HttpStatus.OK).send(createSuccessResponse({
+        ...data[0],
+        links: generateResourceLinks(req, data[0].templateId),
+      }, null));
     } catch (error) {
       next(error);
     }
@@ -52,8 +65,13 @@ class TemplateApi {
 
   async updateTemplate(req, res, next) {
     try {
-      await templateDao.updateTemplate(req.params.templateId, mapTemplateRequestBody(req.body));
-      res.status(HttpStatus.OK).send(createSuccessResponse(null, 'Template updated successfully.'));
+      await templateDao.updateTemplate(
+        req.params.templateId,
+        mapTemplateRequestBody(req.body),
+      );
+      res
+        .status(HttpStatus.OK)
+        .send(createSuccessResponse(null, 'Template updated successfully.'));
     } catch (error) {
       next(error);
     }
