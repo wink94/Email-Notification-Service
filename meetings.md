@@ -77,13 +77,13 @@ All the comments mentioned in the above were rectified and the descriptions were
 
 ### Minutes
 
-1. To show a number in coverage
-2. To complete the documentation and make it up to date
-3. To add the resource table
-4. Asked to complete the readme file with instructions about operations
+1. To show a number in coverage in testing.
+2. To complete the documentation and make it up to date.
+3. To add the resource table.
+4. Asked to complete the readme file with instructions about operations.
 5. asked to put caching or authentication also url converters.
-6. if we are not using authentication, explain why we are not using them
-7. Suggested to complete unit testing
+6. if we are not using authentication, explain why we are not using them.
+7. Suggested to complete unit testing.
 
 ### Action points
 
