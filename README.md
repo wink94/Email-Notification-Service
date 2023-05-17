@@ -1,5 +1,5 @@
 # PWP SPRING 2023
-# Email Notification Service
+# Email Notification Service [wiki](https://github.com/wink94/email-notification-service/wiki)
 
 ## How to start the application
 
