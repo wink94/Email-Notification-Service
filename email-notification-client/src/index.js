@@ -8,6 +8,7 @@ import TemplatePopup from "./EmailForm/TemplatePopup";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
+// Create a browser router configuration
 const router = createBrowserRouter([
   {
     path: "/",
